@@ -105,6 +105,12 @@ over the **exact transmitted segments** — never a re-encode.
   `data-rc-locale` and `data-rc-color-scheme` are emitted only when set.
 - `locale` and `color_scheme` ride **both** the claim and the attribute, so the loader can localize
   and paint server-rendered chrome without first decoding the token.
+- **Host-built branding attributes** (optional, presentational, never emitted by SDK helpers — a
+  host that wants them adds them to its own tag; [decision 26](../decisions.md#26-host-built-launcher-branding-attributes)):
+  `data-rc-theme` (hex primary colour, overrides the project branding), `data-rc-launcher-icon`
+  (absolute URL whose origin is one of the project's `chat_origins`; anything else falls back to the
+  default glyph) and `data-rc-launcher-background` (hex, the launcher bubble only). Same keys as
+  `RootCause('boot', {theme, launcherIcon, launcherBackground})`. Invalid values are ignored.
 - **Mint a fresh token per render.** Tokens are short-lived and single-use — never cache one across
   renders.
 - All attribute values are HTML-escaped.

@@ -219,7 +219,10 @@ between bubble and page. An SPA that offers both
 injects a second tag for the page route (after `RootCause('hide')` on the bubble) or reloads; the
 last injected tag owns `window.RootCause`, and both instances share the stored session for the same
 project, tenant and principal. Optional presentation attributes are `data-rc-locale`,
-`data-rc-color-scheme="light|dark"`. Keep `?v=4`; it is the loader contract revision, not a
+`data-rc-color-scheme="light|dark"`, and the branding trio `data-rc-theme="#2f7d4f"` (primary
+colour), `data-rc-launcher-icon` (absolute URL on one of your chat origins, e.g. your own asset
+path; a transparent PNG/SVG renders inside the bubble) and `data-rc-launcher-background="#ffffff"`
+(bubble colour). Unset or invalid → the project's branding, then the ReplyPen default. Keep `?v=4`; it is the loader contract revision, not a
 cache-busting timestamp. `async` is an ordinary host-page loading choice, not part of the byte-exact
 library golden. In page mode your app creates the target element; the widget tag does not emit it.
 
