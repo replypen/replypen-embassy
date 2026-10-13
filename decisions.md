@@ -460,11 +460,13 @@ so existing signing vectors remain byte-identical.
 A host branding its embed (KampAdmin: its green + its own assistant mascot on the launcher) owns
 those assets, so they ride the loader tag next to `data-rc-color-scheme` instead of a second
 per-project upload in ReplyPen: `data-rc-theme` (already honoured, now documented),
-`data-rc-launcher-icon`, `data-rc-launcher-background`. Precedence: valid tag/boot value > project
-branding > ReplyPen default.
+`data-rc-launcher-icon`, `data-rc-launcher-background`, and the panel header's `data-rc-name` /
+`data-rc-logo`. Precedence: valid tag/boot value > project branding > ReplyPen default. Project
+branding stays the source for the project's other surfaces (run/status pages): naming the chat
+assistant must not rename those.
 
-The icon URL must sit on an origin already in the project's `chat_origins` — the embedding
-allowlist doubles as the image allowlist, so the launcher's `img-src` widens by exactly one known
+Icon and logo URLs must sit on an origin already in the project's `chat_origins` — the embedding
+allowlist doubles as the image allowlist, so the frame's `img-src` widens by exactly one known
 origin and a tag can't turn the bubble into a third-party beacon. The browser loads it with
 `no-referrer`; the host never fetches it. No CDN carve-out until a host needs one.
 

@@ -222,7 +222,8 @@ project, tenant and principal. Optional presentation attributes are `data-rc-loc
 `data-rc-color-scheme="light|dark"`, and the branding trio `data-rc-theme="#2f7d4f"` (primary
 colour), `data-rc-launcher-icon` (absolute URL on one of your chat origins, e.g. your own asset
 path; a transparent PNG/SVG renders inside the bubble) and `data-rc-launcher-background="#ffffff"`
-(bubble colour). Unset or invalid → the project's branding, then the ReplyPen default. Keep `?v=4`; it is the loader contract revision, not a
+(bubble colour), plus `data-rc-name="Tippi"` and `data-rc-logo` (panel header name and image, same
+origin rule as the icon). Unset or invalid → the project's branding, then the ReplyPen default. Keep `?v=4`; it is the loader contract revision, not a
 cache-busting timestamp. `async` is an ordinary host-page loading choice, not part of the byte-exact
 library golden. In page mode your app creates the target element; the widget tag does not emit it.
 

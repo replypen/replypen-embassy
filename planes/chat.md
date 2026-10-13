@@ -109,8 +109,10 @@ over the **exact transmitted segments** — never a re-encode.
   host that wants them adds them to its own tag; [decision 26](../decisions.md#26-host-built-launcher-branding-attributes)):
   `data-rc-theme` (hex primary colour, overrides the project branding), `data-rc-launcher-icon`
   (absolute URL whose origin is one of the project's `chat_origins`; anything else falls back to the
-  default glyph) and `data-rc-launcher-background` (hex, the launcher bubble only). Same keys as
-  `RootCause('boot', {theme, launcherIcon, launcherBackground})`. Invalid values are ignored.
+  default glyph), `data-rc-launcher-background` (hex, the launcher bubble only), `data-rc-name`
+  (panel header name, ≤ 40 chars) and `data-rc-logo` (panel header image, same origin rule as the
+  launcher icon). Same keys as `RootCause('boot', {theme, launcherIcon, launcherBackground, name,
+  logo})`. Invalid values are ignored.
 - **Mint a fresh token per render.** Tokens are short-lived and single-use — never cache one across
   renders.
 - All attribute values are HTML-escaped.
