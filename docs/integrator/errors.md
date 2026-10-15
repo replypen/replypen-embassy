@@ -1019,9 +1019,9 @@ stays so existing links keep resolving.
 
 ## WIDGET_PANEL_NOT_FOUND
 
-- **Meaning:** The loader ran but the ReplyPen panel or launcher iframe returned `404`.
+- **Meaning:** The loader ran but the chat panel did not start: its iframe failed to load, or loaded an error page (`404`, `5xx`, offline) instead of the panel. The loader reloads the panel by itself for about two minutes, so a brief ReplyPen outage recovers without a page refresh.
 - **Who fixes:** operator.
-- **Self-fix:** Confirm the project, origin, and CSP, then reproduce once without browser extensions or a rewriting proxy.
+- **Self-fix:** If the chat appears within two minutes, it was a transient outage; nothing to do. If it stays blank, confirm the project, origin, and CSP, then reproduce once without browser extensions or a rewriting proxy.
 - **Escalate with:** The console error, non-secret origin, browser/network status, and `rc project chat doctor --bundle`.
 
 ## WIDGET_SCRIPT_BLOCKED
