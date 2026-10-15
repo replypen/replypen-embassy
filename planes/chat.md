@@ -123,9 +123,9 @@ over the **exact transmitted segments** — never a re-encode.
 ## Persistent mode (Turbo)
 
 Opt-in via `data-rc-persist="turbo"` on the loader tag: one conversation iframe survives the host's
-Turbo (Hotwire) soft navigations. Only Turbo is supported; other SPAs/routers are not. Implementations
-add no helper for it — a host builds its own tag from the chat token minter and the loader path/revision
-constants.
+Turbo (Hotwire) soft navigations, or a host **shell** whose same-origin inner iframe does the page
+navigation (DentAI). Other SPAs/routers are not supported. Implementations add no helper for it — a host
+builds its own tag from the chat token minter and the loader path/revision constants.
 
 - **No `data-rc-token`.** The host queues `RootCause('boot', {refreshToken})` on the standard stub
   **before** the loader tag. `refreshToken: () => Promise<string>` calls the host's own authenticated
@@ -146,9 +146,13 @@ constants.
 - **`data-rc-target`** (optional placeholder selector): where present the conversation covers it
   (`page`); elsewhere it floats compact on the right, expandable to a viewport overlay or minimized to
   the launcher (which shows a running recording timer).
-- API additions: `RootCause('presentation', 'page'|'compact'|'expanded'|'minimized')` and
-  `RootCause('destroy')`. `boot`/`update`/`show`/`hide`/`on` are unchanged; in persistent mode
-  `update` ignores a token (the hook is the only source).
+- API additions: `RootCause('presentation', 'page'|'compact'|'expanded'|'minimized')`,
+  `RootCause('destroy')` and `RootCause('leave', proceed)` — a host-initiated scope boundary for hosts
+  without Turbo: same guard as a foreign-scope render (capture stops, stay/discard prompt when unsent
+  work exists); `proceed` runs exactly once after destroy (or at once when nothing is live), never on
+  stay. `RootCause('on', 'capture', cb)` reports the panel's take `{startedAt, screen}` (0 = none).
+  `boot`/`update`/`show`/`hide` are unchanged; in persistent mode `update` ignores a token (the hook is
+  the only source). Loader revision `?v=6` carries both.
 
 ## Page context (`page_url`, `page_context`)
 
