@@ -839,6 +839,13 @@ stays so existing links keep resolving.
 - **Self-fix:** Set `ROOTCAUSE_SENT_MESSAGE_URL` to the host-provided HTTPS endpoint and restart the app.
 - **Escalate with:** The error line and redacted Embassy configuration.
 
+## SESSION_BUSY
+
+- **Meaning:** A conversation cannot be deleted while one of its answers is still being produced.
+- **Who fixes:** you.
+- **Self-fix:** Stop the answer in progress (`POST /chat/v1/stop`) or wait for it to finish, then delete again.
+- **Escalate with:** The error line, session id, timestamps, and `rc project chat doctor --bundle` if the conversation never becomes idle.
+
 ## SESSION_CLOSED
 
 - **Meaning:** The session is readable but no longer accepts new turns or decisions.
