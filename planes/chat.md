@@ -202,6 +202,26 @@ may send the same optional fields directly. Use loader revision `?v=5` for this 
 Sanitization cases: [`fixtures/chat/page_url.json`](../fixtures/chat/page_url.json), replayed by the
 host's browser and Go tests; these are unsigned normalization cases, not HMAC envelopes.
 
+## UI guidance (`page_guidance`, `guide_support`)
+
+The assistant can highlight where to click or look on the host page ("show me where"). It only
+scrolls to and rings elements; the user performs every click. Nothing to install beyond the loader:
+
+- **Mark targets** with `data-rc-guide="<id>"` (zero-config), and/or describe them in the project
+  brain's `ui_guidance.yaml` (`version: 1`, `targets: [{id, selector?, label?, kind: control|region,
+  after?, note?}]`): ReplyPen serves the validated id → selector map to the loader, so selector fixes
+  ship as a brain commit, no app deploy. Ids are dotted lowercase (`index.columns`,
+  `record.field.{field_id}`); a template carries 1–2 `{param}` placeholders matched by the selector.
+- **Manifest:** per message the loader sends top-level `page_guidance`
+  `{"v":1,"epoch":"…","targets":[{"id":"index.columns","state":"present|hidden|disabled|ambiguous"}],"truncated":false}`
+  (ids and states only, no text or values; ≤200 entries, ≤24 KiB). Same trust and storage rules as
+  `page_context`: an untrusted hint, embed sessions only, frozen with the message, private, never in
+  transcript/share/viewer. Invalid entries are dropped, never a failed message.
+- **`guide_support: true`** tells the host this browser can run a guide; only then may the answer
+  carry one (a `data-guide` part). The next message reports how it ended as a
+  `data-guide-result {guide_id, outcome, step}` part.
+- API-only clients may send `page_guidance` but should not send `guide_support`.
+
 The panel opens a session on first send or upload, not on load, so a rendered token's `jti` burns
 only when the user engages. A cold open resumes the principal's newest conversation active within 2h,
 else shows a fresh composer with recent conversations.
