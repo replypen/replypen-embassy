@@ -1,6 +1,6 @@
 # Host ↔ Embassy wire contract — protocol 1
 
-The single authoritative document. Every Embassy and the rootcause host MUST conform. Per-plane
+The single authoritative document. Every Embassy and the ReplyPen host MUST conform. Per-plane
 detail lives in [`planes/`](planes/); the byte-exact goldens live in [`fixtures/`](fixtures/); pinned
 ambiguities live in [`decisions.md`](decisions.md).
 

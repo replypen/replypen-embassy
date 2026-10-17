@@ -4,15 +4,15 @@ Every customer-facing error has a stable SCREAMING_SNAKE code, one plain-languag
 link of this form:
 
 ```text
-https://github.com/rootcause-org/rootcause-embassy/blob/main/docs/integrator/errors.md#<code-lowercased>
+https://github.com/replypen/replypen-embassy/blob/main/docs/integrator/errors.md#<code-lowercased>
 ```
 
 The widget writes `console.error("[ReplyPen] <CODE>: <hint> — <docs>")`. Never include tokens,
 secrets, personal data, private host details, provider names, costs, or stack traces in an error or
 bundle.
 
-`rc dev action doctor <action-id> [--params JSON] [--bundle]` ships today. In `rc >= 1.22.0`, use
-`rc project chat doctor [--origin URL] [--principal-kind KIND] [--since 30m|1h|24h] [--bundle]` for chat diagnostics.
+`rp dev action doctor <action-id> [--params JSON] [--bundle]` ships today. In `rp`, or `rc >= 1.22.0`, use
+`rp project chat doctor [--origin URL] [--principal-kind KIND] [--since 30m|1h|24h] [--bundle]` for chat diagnostics.
 
 ## ACTION_CLOCK_SKEW_INVALID
 
@@ -26,7 +26,7 @@ bundle.
 - **Meaning:** The chat action proposal could not be settled safely; its state may have changed.
 - **Who fixes:** operator.
 - **Self-fix:** Re-read the action card/session. Do not repeat a confirmation while the outcome is unknown.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_DEADLINE_INVALID
 
@@ -40,27 +40,27 @@ bundle.
 - **Meaning:** The approved action script could not complete successfully.
 - **Who fixes:** you.
 - **Self-fix:** Inspect the safe execution result, fix the app dependency or handler, and do not retry while the outcome is uncertain.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_EXECUTOR_UNAVAILABLE
 
 - **Meaning:** ReplyPen cannot start action execution because the action executor is not available.
 - **Who fixes:** operator.
 - **Self-fix:** Stop before confirmation and ask the operator to verify the project's action execution service.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_FAILED
 
 - **Meaning:** The action ran or attempted to run but finished with a failed outcome.
 - **Who fixes:** you.
 - **Self-fix:** Inspect the action's customer-safe result, fix the script or app dependency, and do not retry while the outcome is uncertain.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_FETCH_URL_REQUIRED
 
 - **Meaning:** Actions are enabled, but no signed script-fetch URL is configured.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_FETCH_URL` to the host-provided HTTPS endpoint and restart the app.
+- **Self-fix:** Set `REPLYPEN_FETCH_URL` to the host-provided HTTPS endpoint and restart the app.
 - **Escalate with:** The error line, Embassy version, and redacted action configuration.
 
 ## ACTION_NOT_FOUND
@@ -68,7 +68,7 @@ bundle.
 - **Meaning:** The requested chat action does not exist or is no longer available.
 - **Who fixes:** operator.
 - **Self-fix:** Refresh the chat session and do not retry a stale action id.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## ACTION_PLANE_DISABLED
 
@@ -82,20 +82,20 @@ bundle.
 - **Meaning:** The action request names a project that has no configured verification secret.
 - **Who fixes:** operator.
 - **Self-fix:** Confirm the project slug and configure that project's action secret without exposing it.
-- **Escalate with:** The error line, project slug, Embassy version, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, project slug, Embassy version, and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_RESOLVE_FAILED
 
 - **Meaning:** ReplyPen could not resolve the approved action definition and pinned script digest.
 - **Who fixes:** operator.
 - **Self-fix:** Confirm the action id is approved and live in the project brain; do not substitute an unapproved script.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTION_SECRET_REQUIRED
 
 - **Meaning:** Actions are partially configured without a usable verification secret.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_ACTION_SECRET` or a complete per-project secret map, then restart the app.
+- **Self-fix:** Set `REPLYPEN_ACTION_SECRET` or a complete per-project secret map, then restart the app.
 - **Escalate with:** The error line and redacted Embassy configuration; never send secrets.
 
 ## ACTION_SECRETS_INVALID
@@ -131,21 +131,21 @@ bundle.
 - **Meaning:** The action exists but cannot currently accept this decision.
 - **Who fixes:** operator.
 - **Self-fix:** Refresh the action card and avoid repeating the decision while its state is uncertain.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## ACTIONS_DISABLED
 
 - **Meaning:** The project action plane is disabled.
 - **Who fixes:** operator.
 - **Self-fix:** Keep proposals non-actionable and ask the operator to enable actions with the intended autonomy cap.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ACTIONS_UNAVAILABLE
 
 - **Meaning:** Chat action decisions are not enabled or wired for this project.
 - **Who fixes:** operator.
 - **Self-fix:** Keep the card non-actionable and ask the operator to verify action enablement and the Embassy mount.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## ANALYSIS_BODY_REQUIRED
 
@@ -172,7 +172,7 @@ bundle.
 
 - **Meaning:** Analysis triggering was requested without a configured endpoint.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_TRIGGER_URL` to the host-provided HTTPS endpoint and restart the app.
+- **Self-fix:** Set `REPLYPEN_TRIGGER_URL` to the host-provided HTTPS endpoint and restart the app.
 - **Escalate with:** The error line and redacted Embassy configuration.
 
 ## API_BASE_URL_INVALID
@@ -186,14 +186,14 @@ bundle.
 
 - **Meaning:** An API call was requested without a configured ReplyPen API base URL.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_API_BASE_URL` and restart the app.
+- **Self-fix:** Set `REPLYPEN_API_BASE_URL` and restart the app.
 - **Escalate with:** The error line and redacted Embassy configuration.
 
 ## API_KEY_REQUIRED
 
 - **Meaning:** An API call was requested without a ReplyPen API key.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_API_KEY` in the app environment and restart; never log the value.
+- **Self-fix:** Set `REPLYPEN_API_KEY` in the app environment and restart; never log the value.
 - **Escalate with:** The error line and only whether the variable is present; never send the key.
 
 ## API_METHOD_INVALID
@@ -250,7 +250,7 @@ bundle.
 - **Meaning:** This upload is already bound to another message and cannot be reused.
 - **Who fixes:** you.
 - **Self-fix:** Upload the file again and use the new `attachment_id` in exactly one message.
-- **Escalate with:** The error line and `rc project chat doctor --bundle` if a new upload also fails.
+- **Escalate with:** The error line and `rp project chat doctor --bundle` if a new upload also fails.
 
 ## ATTACHMENT_INVALID
 
@@ -278,28 +278,28 @@ bundle.
 - **Meaning:** The attachment service is not enabled for this chat surface.
 - **Who fixes:** operator.
 - **Self-fix:** Send the message without file parts, then ask the operator to verify attachment wiring.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## BAD_ATTACHMENT
 
 - **Meaning:** An attachment id is malformed or duplicated in the message.
 - **Who fixes:** you.
 - **Self-fix:** Send each valid upload id once and copy it unchanged from the upload response.
-- **Escalate with:** The error line and the redacted message part shapes plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and the redacted message part shapes plus `rp project chat doctor --bundle`.
 
 ## BAD_BODY
 
 - **Meaning:** The request body, id, multipart form, score, or required field is invalid.
 - **Who fixes:** you.
 - **Self-fix:** Compare the request with `chat.md`, set `Content-Type`, and send only documented fields and types.
-- **Escalate with:** The error line, redacted request shape, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, redacted request shape, and `rp project chat doctor --bundle`.
 
 ## BAD_ID
 
 - **Meaning:** A session or attachment path id is not a UUID.
 - **Who fixes:** you.
 - **Self-fix:** Use the id returned by the preceding ReplyPen response without truncation or decoration.
-- **Escalate with:** The error line and `rc project chat doctor --bundle` if the returned id itself is rejected.
+- **Escalate with:** The error line and `rp project chat doctor --bundle` if the returned id itself is rejected.
 
 ## BAD_LIMIT
 
@@ -313,7 +313,7 @@ bundle.
 - **Meaning:** An action decision is not `confirm`, `decline`, or `cancel`.
 - **Who fixes:** you.
 - **Self-fix:** Send one allowed lowercase outcome in `{"outcome":"..."}`.
-- **Escalate with:** The error line and a redacted request shape plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and a redacted request shape plus `rp project chat doctor --bundle`.
 
 ## BAD_PRINCIPAL
 
@@ -326,22 +326,22 @@ bundle.
 
 - **Meaning:** An Embassy HMAC signature is absent, malformed, uses the wrong secret, or does not match the exact bytes.
 - **Who fixes:** you.
-- **Self-fix:** Verify `ROOTCAUSE_ACTION_SECRET`, sign the raw transmitted bytes once, and replay the signing fixtures.
-- **Escalate with:** The error line, Embassy version, hub SHA, and `rc dev action doctor <action-id> --bundle`; never send the signature key.
+- **Self-fix:** Verify `REPLYPEN_ACTION_SECRET`, sign the raw transmitted bytes once, and replay the signing fixtures.
+- **Escalate with:** The error line, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`; never send the signature key.
 
 ## BAD_TOKEN
 
 - **Meaning:** The chat JWT signature, algorithm, audience, issuer, time window, or required claim is invalid.
 - **Who fixes:** you.
-- **Self-fix:** Replay `fixtures/chat/jwt_vector.json`, check the backend clock, and compare `aud`, `iss`, `origin`, and expiry.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`; never paste the token.
+- **Self-fix:** Replay `fixtures/chat/jwt_vector_replypen.json`, check the backend clock, and compare `aud`, `iss`, `origin`, and expiry.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`; never paste the token.
 
 ## BRANDING_UNAVAILABLE
 
 - **Meaning:** Chat doctor could not read the project's public branding state.
 - **Who fixes:** operator.
 - **Self-fix:** Verify API reachability and that the CLI is scoped to the intended project.
-- **Escalate with:** `rc project chat doctor --bundle`.
+- **Escalate with:** `rp project chat doctor --bundle`.
 
 ## CHAT_BASE_URL_INVALID
 
@@ -362,14 +362,14 @@ bundle.
 - **Meaning:** Embedded chat is disabled for the project.
 - **Who fixes:** operator.
 - **Self-fix:** Confirm the intended project slug, then ask the operator to enable chat for it.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## CHAT_DOCTOR_FAILED
 
 - **Meaning:** One or more required embedded-chat checks failed.
 - **Who fixes:** you or operator, as named by the individual finding.
 - **Self-fix:** Resolve each failed finding, then rerun chat doctor.
-- **Escalate with:** `rc project chat doctor --bundle`.
+- **Escalate with:** `rp project chat doctor --bundle`.
 
 ## CHAT_EXTERNAL_ID_REQUIRED
 
@@ -382,7 +382,7 @@ bundle.
 
 - **Meaning:** Chat token minting was attempted without a project slug.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_CHAT_PROJECT` to the operator-provided slug and restart the app.
+- **Self-fix:** Set `REPLYPEN_CHAT_PROJECT` to the operator-provided slug and restart the app.
 - **Escalate with:** The error line and redacted chat configuration.
 
 ## CHAT_SECRET_FALLBACK
@@ -390,20 +390,20 @@ bundle.
 - **Meaning:** Chat still signs tokens with the legacy webhook secret.
 - **Who fixes:** operator.
 - **Self-fix:** Rotate a dedicated chat signing secret, then update the server-side minter.
-- **Escalate with:** `rc project chat doctor --bundle`; never send either secret.
+- **Escalate with:** `rp project chat doctor --bundle`; never send either secret.
 
 ## CHAT_SECRET_MISSING
 
 - **Meaning:** No dedicated chat signing secret exists to reveal.
 - **Who fixes:** operator.
-- **Self-fix:** Run `rc project chat secret rotate` and capture its one-time output safely.
-- **Escalate with:** `rc project chat doctor --bundle`; never send the generated secret.
+- **Self-fix:** Run `rp project chat secret rotate` and capture its one-time output safely.
+- **Escalate with:** `rp project chat doctor --bundle`; never send the generated secret.
 
 ## CHAT_SECRET_REQUIRED
 
 - **Meaning:** Chat token minting was attempted without a signing secret.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_CHAT_SECRET` in the server environment and restart; never expose it to the browser.
+- **Self-fix:** Set `REPLYPEN_CHAT_SECRET` in the server environment and restart; never expose it to the browser.
 - **Escalate with:** The error line and only whether the variable is present; never send the secret.
 
 ## CHAT_SECRET_REUSED
@@ -418,7 +418,7 @@ bundle.
 - **Meaning:** ReplyPen could not create or decrypt the dedicated chat signing secret.
 - **Who fixes:** operator.
 - **Self-fix:** Stop rotating or minting tokens and ask the operator to verify host secret storage.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`; never send secret material.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`; never send secret material.
 
 ## CONTEXT_REF_REFUSED
 
@@ -446,126 +446,126 @@ bundle.
 - **Meaning:** The signed Embassy health response is malformed, oversized, unsuccessful, or missing required fields.
 - **Who fixes:** you.
 - **Self-fix:** Upgrade the Embassy, verify its signed `/health` route and protocol fields, and replay the health fixture.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_MODE_REQUIRED
 
 - **Meaning:** The project uses hosted actions, so there is no Embassy action mount to probe.
 - **Who fixes:** operator.
 - **Self-fix:** Ask the operator to select the intended Embassy execution mode before testing a real action.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_NOT_MOUNTED
 
 - **Meaning:** The configured app URL responds, but no Embassy action route is mounted there.
 - **Who fixes:** you.
 - **Self-fix:** Mount the language Embassy at the registered path and verify the unsigned 405 liveness floor.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_PROTOCOL_MISMATCH
 
 - **Meaning:** The mounted Embassy reports a protocol version incompatible with the host.
 - **Who fixes:** you.
 - **Self-fix:** Upgrade the Embassy to a compatible release; never bypass protocol or signature checks.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_REJECTED
 
 - **Meaning:** The Embassy returned a signed refusal that does not map to a more specific public code.
 - **Who fixes:** you.
 - **Self-fix:** Read the verified refusal class and hint, then follow its catalogue entry without weakening the gate.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_REPLAYED
 
 - **Meaning:** The Embassy rejected the invocation as stale or replayed.
 - **Who fixes:** you.
 - **Self-fix:** Synchronize the app clock, use a fresh nonce per invocation, and do not retry a possibly executed action blindly.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_RESOLVE_FAILED
 
 - **Meaning:** The Embassy could not fetch or digest-verify the approved action script.
 - **Who fixes:** operator.
 - **Self-fix:** Verify signed script-fetch reachability and approval state; never run bytes whose digest does not match.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_RESULT_INVALID
 
 - **Meaning:** The signature-verified Embassy action result is malformed, oversized, or not valid JSON.
 - **Who fixes:** you.
 - **Self-fix:** Upgrade the Embassy and replay the signed result fixtures over the exact transmitted bytes.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_SCHEMA_REJECTED
 
 - **Meaning:** The Embassy refused action params because they do not satisfy the approved schema.
 - **Who fixes:** you.
 - **Self-fix:** Match param keys and types to the approved manifest and remove reserved tenant selectors.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_SIGNATURE_REJECTED
 
 - **Meaning:** The Embassy could not verify the host invocation signature with its configured action secret.
 - **Who fixes:** operator.
 - **Self-fix:** Verify the app and host hold the same per-project action reverse secret; never paste either secret into diagnostics.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_TLS
 
 - **Meaning:** ReplyPen could not establish a trusted TLS connection to the Embassy URL.
 - **Who fixes:** you.
 - **Self-fix:** Install a publicly trusted, hostname-matching certificate with a complete chain and current validity.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_UNREACHABLE
 
 - **Meaning:** ReplyPen could not connect to the Embassy or the request timed out before a response.
 - **Who fixes:** you.
 - **Self-fix:** Check public DNS, firewall/allowlist, route availability, and the Embassy's total request deadline.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_URL_MISSING
 
 - **Meaning:** The project has no Embassy action URL configured.
 - **Who fixes:** operator.
 - **Self-fix:** Provide the operator with the public HTTPS mount URL and confirm it contains no credentials or query string.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMBASSY_URL_REFUSED
 
 - **Meaning:** The configured Embassy URL violates the host's outbound URL safety rules.
 - **Who fixes:** operator.
 - **Self-fix:** Use a public HTTPS hostname that resolves to the intended app; loopback, private, credentialed, or unsafe redirect targets are refused.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## EMPTY_FILE
 
 - **Meaning:** The uploaded file has zero bytes.
 - **Who fixes:** you.
 - **Self-fix:** Reject empty files in the composer or upload the intended non-empty file.
-- **Escalate with:** The error line and file metadata without contents plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and file metadata without contents plus `rp project chat doctor --bundle`.
 
 ## FEEDBACK_UNAVAILABLE
 
 - **Meaning:** Turn feedback is not enabled on this chat surface.
 - **Who fixes:** operator.
 - **Self-fix:** Hide or disable the feedback control until the operator confirms availability.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## FORBIDDEN
 
-- **Meaning:** The authenticated `rc` identity lacks the project role, tenant reach, or scope required for this operation. Principal-manifest reads, edits and identity resolution additionally require project-admin authority, not just the scope.
+- **Meaning:** The authenticated `rp` identity lacks the project role, tenant reach, or scope required for this operation. Principal-manifest reads, edits and identity resolution additionally require project-admin authority, not just the scope.
 - **Who fixes:** you.
-- **Self-fix:** Run `rc auth access`, select the intended project/tenant, and ask a project admin for the missing permission.
-- **Escalate with:** The error line, the command you ran, and `rc dev action doctor <action-id> --bundle` for an action.
+- **Self-fix:** Run `rp auth access`, select the intended project/tenant, and ask a project admin for the missing permission.
+- **Escalate with:** The error line, the command you ran, and `rp dev action doctor <action-id> --bundle` for an action.
 
 ## HANDLER_ERROR
 
 - **Meaning:** The Embassy accepted an analysis result but could not dispatch it to the configured app handler.
 - **Who fixes:** you.
 - **Self-fix:** Verify the result handler is registered, loadable, and succeeds for the redacted conformance fixture.
-- **Escalate with:** The error line, Embassy version, hub SHA, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`.
 
 ## HOST_REFUSED
 
@@ -580,21 +580,21 @@ bundle.
 - **Meaning:** The widget received a non-success host response without a structured public error.
 - **Who fixes:** operator.
 - **Self-fix:** Retry once after confirming ReplyPen is reachable; do not loop on the rejected request.
-- **Escalate with:** The browser error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The browser error line and `rp project chat doctor --bundle`.
 
 ## INTERNAL
 
 - **Meaning:** The chat host could not complete a request for a reason the integrator cannot repair from the request.
 - **Who fixes:** operator.
 - **Self-fix:** Retry one read-only request once. Do not repeat a state-changing request with an unknown outcome.
-- **Escalate with:** The error line, UTC timestamp, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, UTC timestamp, and `rp project chat doctor --bundle`.
 
 ## INTERNAL_ERROR
 
 - **Meaning:** The Embassy hit an unforeseen failure after its public validation gates.
 - **Who fixes:** operator.
 - **Self-fix:** Upgrade to the current Embassy release and rerun the conformance suite; do not expose exception text.
-- **Escalate with:** The error line, Embassy version, hub SHA, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`.
 
 ## INVALID_PARAMS
 
@@ -613,42 +613,42 @@ stays so existing links keep resolving.
 - **Meaning:** An Embassy action/result body is malformed, missing a required field, or names an unsupported runtime.
 - **Who fixes:** you.
 - **Self-fix:** Validate against `CONTRACT.md`, send the language's runtime token, and replay the invocation fixtures.
-- **Escalate with:** The error line, redacted field names, Embassy version, hub SHA, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, redacted field names, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`.
 
 ## METHOD_NOT_ALLOWED
 
 - **Meaning:** A non-POST request reached an Embassy action mount; this is expected only for the 405 liveness probe.
 - **Who fixes:** you.
 - **Self-fix:** Use POST for invocations. If running the probe, verify status `405` and `Allow: POST` and treat it as success.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle` if the mount does not return the 405 floor.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle` if the mount does not return the 405 floor.
 
 ## MISSING_FILE
 
 - **Meaning:** A multipart upload omitted the `file` form field.
 - **Who fixes:** you.
 - **Self-fix:** Send exactly one file part named `file` plus the `session_id` field.
-- **Escalate with:** The error line and a redacted multipart field-name list plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and a redacted multipart field-name list plus `rp project chat doctor --bundle`.
 
 ## NETWORK_ERROR
 
 - **Meaning:** The widget or CLI could not reach ReplyPen over the network.
 - **Who fixes:** you or operator.
 - **Self-fix:** Check connectivity, DNS, TLS, CSP, and the configured ReplyPen origin before retrying.
-- **Escalate with:** The error line, UTC timestamp, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, UTC timestamp, and `rp project chat doctor --bundle`.
 
 ## NO_REFRESH_HOOK
 
 - **Meaning:** A persistent (`data-rc-persist="turbo"`) loader booted without a `refreshToken` hook, so it has no token source.
 - **Who fixes:** you.
 - **Self-fix:** Queue `RootCause('boot', {refreshToken})` on the stub before the loader tag; see [persistent mode](chat.md#persistent-mode-turbo).
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## NO_TOKEN
 
 - **Meaning:** The chat request has no usable `Authorization: Bearer <token>` header.
 - **Who fixes:** you.
 - **Self-fix:** Fetch a fresh token from your backend and attach it as a Bearer token; do not place it in the URL.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`; never paste the token.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`; never paste the token.
 
 ## OK
 
@@ -669,49 +669,49 @@ stays so existing links keep resolving.
 - **Meaning:** The request origin differs from the exact origin signed into the token.
 - **Who fixes:** you.
 - **Self-fix:** Mint on the backend with the browser's exact `scheme://host[:port]` and do not reuse a token across origins.
-- **Escalate with:** The error line, the two non-secret origins, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, the two non-secret origins, and `rp project chat doctor --bundle`.
 
 ## ORIGIN_NEAR_MISS
 
 - **Meaning:** A doctor warning: an origin that was checked or recently rejected is not registered, but a very similar one is. One of the two is almost certainly a typo.
 - **Who fixes:** operator.
-- **Self-fix:** Compare both origins with the page's real `window.location.origin`, then correct `chat_origins` (`rc project chat set chat_origins=...`).
-- **Escalate with:** Both origins and `rc project chat doctor --bundle`.
+- **Self-fix:** Compare both origins with the page's real `window.location.origin`, then correct `chat_origins` (`rp project chat set chat_origins=...`).
+- **Escalate with:** Both origins and `rp project chat doctor --bundle`.
 
 ## ORIGIN_NOT_ALLOWED
 
 - **Meaning:** The embedding origin is missing or absent from the project's exact origin allowlist.
 - **Who fixes:** operator.
 - **Self-fix:** Verify the page origin has no path/trailing slash, then request that exact origin be registered.
-- **Escalate with:** The error line, exact origin, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, exact origin, and `rp project chat doctor --bundle`.
 
 ## ORIGIN_UNRESOLVABLE
 
 - **Meaning:** A doctor warning: a `chat_origins` entry has no DNS record, so no real page can be served from it. Usually a near-miss typo of the app host.
 - **Who fixes:** operator.
 - **Self-fix:** Replace the entry with the page's real `window.location.origin`.
-- **Escalate with:** The entry and `rc project chat doctor --bundle`.
+- **Escalate with:** The entry and `rp project chat doctor --bundle`.
 
 ## PANEL_ERROR
 
 - **Meaning:** The embedded panel could not complete a widget request.
 - **Who fixes:** you or operator.
 - **Self-fix:** Reload once, then inspect the accompanying public code and hint.
-- **Escalate with:** The browser error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The browser error line and `rp project chat doctor --bundle`.
 
 ## PRINCIPALS_DORMANT
 
 - **Meaning:** Chat is enabled without declared principal kinds, so sessions are not user-scoped.
 - **Who fixes:** operator.
 - **Self-fix:** If user scoping is required, install a validated principal manifest before enabling the integration.
-- **Escalate with:** `rc project chat doctor --bundle` and the intended public kind names only.
+- **Escalate with:** `rp project chat doctor --bundle` and the intended public kind names only.
 
 ## PRINCIPAL_LOOKUP_FAILED
 
 - **Meaning:** The host-side email lookup or run-time principal verification could not execute against your database.
 - **Who fixes:** you.
 - **Self-fix:** Check the manifest query, provisioning DSN, parameter types, and database reachability. For run-time verification, ensure the external ID has the type the verify query expects.
-- **Escalate with:** The error line, the principal kind, the session id, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, the principal kind, the session id, and `rp project chat doctor --bundle`.
 
 ## PRINCIPAL_LOOKUP_NOT_CONFIGURED
 
@@ -732,14 +732,14 @@ stays so existing links keep resolving.
 - **Meaning:** The project declares principal kinds but the token has no complete valid principal.
 - **Who fixes:** you.
 - **Self-fix:** Mint `principal.kind`, `external_id`, `asserted_by`, and `assurance` from the authenticated backend.
-- **Escalate with:** The error line, redacted claim names, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, redacted claim names, and `rp project chat doctor --bundle`.
 
 ## PRINCIPAL_UNVERIFIED
 
 - **Meaning:** The session opened, but no record matched the asserted principal, so the turn was refused rather than answered at a wider scope.
 - **Who fixes:** you.
 - **Self-fix:** Mint the token with an `external_id` that exists for that kind in your own data, and confirm the manifest's verify query matches exactly one row for it.
-- **Escalate with:** The error line, the principal kind, the session id, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, the principal kind, the session id, and `rp project chat doctor --bundle`.
 
 ## PREVIEW_PRINCIPAL_INVALID
 
@@ -781,35 +781,35 @@ stays so existing links keep resolving.
 - **Meaning:** The caller or origin exceeded the chat request budget.
 - **Who fixes:** you.
 - **Self-fix:** Honor `Retry-After`, debounce duplicate calls, and stop mint/reload loops.
-- **Escalate with:** The error line, request cadence without payloads, and `rc project chat doctor --bundle` if normal human use is limited.
+- **Escalate with:** The error line, request cadence without payloads, and `rp project chat doctor --bundle` if normal human use is limited.
 
 ## REPLAY
 
 - **Meaning:** An Embassy nonce was already used or `issued_at` is outside the accepted clock window.
 - **Who fixes:** you.
 - **Self-fix:** Generate a fresh nonce per invocation, synchronize clocks, and never automatically retry a possibly executed action.
-- **Escalate with:** The error line, redacted timestamps/nonces, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, redacted timestamps/nonces, and `rp dev action doctor <action-id> --bundle`.
 
 ## RESOLVE_FAILED
 
 - **Meaning:** The Embassy could not fetch or verify the approved script bytes for the pinned digest.
 - **Who fixes:** operator.
 - **Self-fix:** Check Embassy network reachability and configured fetch URL, then run a dry run; never bypass digest verification.
-- **Escalate with:** The error line, action id, digest, Embassy version, hub SHA, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, action id, digest, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`.
 
 ## RUN_IN_FLIGHT
 
 - **Meaning:** Another message turn is already processing for this session.
 - **Who fixes:** you.
 - **Self-fix:** Disable duplicate sends and wait for the current SSE turn to finish before posting another message.
-- **Escalate with:** The error line, session id, timestamps, and `rc project chat doctor --bundle` if the state never clears.
+- **Escalate with:** The error line, session id, timestamps, and `rp project chat doctor --bundle` if the state never clears.
 
 ## SCHEMA_VIOLATION
 
 - **Meaning:** Action params fail the approved invocation schema or try to override reserved tenant fields.
 - **Who fixes:** you.
 - **Self-fix:** Compare param keys/types with the action manifest and pass tenant identity only through the trusted tuple.
-- **Escalate with:** The error line, redacted param keys/schema, and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line, redacted param keys/schema, and `rp dev action doctor <action-id> --bundle`.
 
 ## SENT_MESSAGE_CONTENT_REQUIRED
 
@@ -836,7 +836,7 @@ stays so existing links keep resolving.
 
 - **Meaning:** Sent-message reporting was requested without a configured endpoint.
 - **Who fixes:** you.
-- **Self-fix:** Set `ROOTCAUSE_SENT_MESSAGE_URL` to the host-provided HTTPS endpoint and restart the app.
+- **Self-fix:** Set `REPLYPEN_SENT_MESSAGE_URL` to the host-provided HTTPS endpoint and restart the app.
 - **Escalate with:** The error line and redacted Embassy configuration.
 
 ## SESSION_BUSY
@@ -844,21 +844,21 @@ stays so existing links keep resolving.
 - **Meaning:** A conversation cannot be deleted while one of its answers is still being produced.
 - **Who fixes:** you.
 - **Self-fix:** Stop the answer in progress (`POST /chat/v1/stop`) or wait for it to finish, then delete again.
-- **Escalate with:** The error line, session id, timestamps, and `rc project chat doctor --bundle` if the conversation never becomes idle.
+- **Escalate with:** The error line, session id, timestamps, and `rp project chat doctor --bundle` if the conversation never becomes idle.
 
 ## SESSION_CLOSED
 
 - **Meaning:** The session is readable but no longer accepts new turns or decisions.
 - **Who fixes:** you.
 - **Self-fix:** Open a new session with a freshly minted token and keep the closed transcript read-only.
-- **Escalate with:** The error line and `rc project chat doctor --bundle` if a newly opened session is closed.
+- **Escalate with:** The error line and `rp project chat doctor --bundle` if a newly opened session is closed.
 
 ## SESSION_DRIFT
 
 - **Meaning:** The token's origin, principal, or tenant differs from the values bound when the session opened.
 - **Who fixes:** you.
 - **Self-fix:** Resume only with tokens minted for the same authenticated identity, tenant, and origin; otherwise open a new session.
-- **Escalate with:** The error line, redacted claim shapes, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, redacted claim shapes, and `rp project chat doctor --bundle`.
 
 ## SESSION_ID_REQUIRED
 
@@ -872,35 +872,35 @@ stays so existing links keep resolving.
 - **Meaning:** The requested chat session does not exist or is not reachable by this token.
 - **Who fixes:** you.
 - **Self-fix:** Use the session id returned by the open call, or open a fresh session.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## TENANT_NOT_SUPPORTED
 
 - **Meaning:** A token or principal-resolution request carries a tenant for a project that has no tenants.
 - **Who fixes:** you.
 - **Self-fix:** Omit the `tenant` claim for this project and mint a fresh token.
-- **Escalate with:** The error line and `rc project chat doctor --bundle` if the operator says the project is tenant-enabled.
+- **Escalate with:** The error line and `rp project chat doctor --bundle` if the operator says the project is tenant-enabled.
 
 ## TENANT_REQUIRED
 
 - **Meaning:** A tenant-enabled chat token, identity resolution, or action request omits the required tenant slug.
 - **Who fixes:** you.
 - **Self-fix:** Resolve the authenticated app context to the registered tenant slug; select it before resolving an identity, mint a fresh chat token, or pass the action's trusted tenant selector outside params.
-- **Escalate with:** For actions, the error line and `rc dev action doctor <action-id> --bundle`; for chat, the error line, redacted tenant slug, and `rc project chat doctor --bundle`.
+- **Escalate with:** For actions, the error line and `rp dev action doctor <action-id> --bundle`; for chat, the error line, redacted tenant slug, and `rp project chat doctor --bundle`.
 
 ## TENANT_UNAVAILABLE
 
 - **Meaning:** The named tenant exists but is not active.
 - **Who fixes:** operator.
 - **Self-fix:** Confirm the intended tenant slug and ask the operator to inspect its status; do not fall back to unscoped access.
-- **Escalate with:** The error line, tenant slug, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, tenant slug, and `rp project chat doctor --bundle`.
 
 ## TOKEN_EXCHANGE_FAILED
 
 - **Meaning:** The host refused or could not complete a chat token exchange.
 - **Who fixes:** operator.
 - **Self-fix:** Mint a fresh backend token and verify project, principal, origin, and clock configuration.
-- **Escalate with:** The error line and `rc project chat doctor --bundle`; never paste the token.
+- **Escalate with:** The error line and `rp project chat doctor --bundle`; never paste the token.
 
 ## TOKEN_MINT_FAILED
 
@@ -914,7 +914,7 @@ stays so existing links keep resolving.
 - **Meaning:** The token's single-use `jti` already opened a session.
 - **Who fixes:** you.
 - **Self-fix:** Mint a fresh token with a new UUID `jti` for every new session/render; keep the original page token for its existing session calls.
-- **Escalate with:** The error line, mint/open timestamps, and `rc project chat doctor --bundle`; never paste either token.
+- **Escalate with:** The error line, mint/open timestamps, and `rp project chat doctor --bundle`; never paste either token.
 
 ## TOKEN_TTL_INVALID
 
@@ -928,70 +928,70 @@ stays so existing links keep resolving.
 - **Meaning:** An upload or multipart request exceeds the accepted size.
 - **Who fixes:** you.
 - **Self-fix:** Reject or compress the file before upload and do not retry the same oversized body.
-- **Escalate with:** The error line and file name/type/size only plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and file name/type/size only plus `rp project chat doctor --bundle`.
 
 ## TOO_MANY_ATTACHMENTS
 
 - **Meaning:** One message references more attachments than a turn accepts.
 - **Who fixes:** you.
 - **Self-fix:** Split the files across turns and keep every upload id single-use.
-- **Escalate with:** The error line, attachment count, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, attachment count, and `rp project chat doctor --bundle`.
 
 ## TOO_MANY_PENDING
 
 - **Meaning:** The session holds too many uploaded files that have not been sent in a message.
 - **Who fixes:** you.
 - **Self-fix:** Send the intended message, stop abandoned pre-uploads, or wait for pending uploads to expire.
-- **Escalate with:** The error line, pending-file count/total size, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, pending-file count/total size, and `rp project chat doctor --bundle`.
 
 ## TURN_TOO_LARGE
 
 - **Meaning:** The combined attachments referenced by one message exceed the turn limit.
 - **Who fixes:** you.
 - **Self-fix:** Split the attachments across messages or reduce their sizes.
-- **Escalate with:** The error line, aggregate size without contents, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, aggregate size without contents, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_ACTION
 
 - **Meaning:** The action id is absent from the project's approved live registry.
 - **Who fixes:** you.
 - **Self-fix:** Use the exact approved action id or complete the draft → review → approve lifecycle before invoking it.
-- **Escalate with:** The error line and `rc dev action doctor <action-id> --bundle`.
+- **Escalate with:** The error line and `rp dev action doctor <action-id> --bundle`.
 
 ## UNKNOWN_ATTACHMENT
 
 - **Meaning:** The attachment does not exist in this session or is not reachable by this principal.
 - **Who fixes:** you.
 - **Self-fix:** Use the upload response id in the same session and do not reuse ids across sessions.
-- **Escalate with:** The error line, session/attachment ids, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, session/attachment ids, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_PRINCIPAL_KIND
 
 - **Meaning:** Token minting requested a principal kind absent from the project's manifest.
 - **Who fixes:** you or operator.
 - **Self-fix:** Use a declared kind exactly, or add the intended kind to the validated manifest.
-- **Escalate with:** The error line, public kind name, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, public kind name, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_PROJECT
 
 - **Meaning:** The project query parameter is missing or does not name a visible ReplyPen project.
 - **Who fixes:** you.
 - **Self-fix:** Copy the public project slug supplied by the operator into both token and widget configuration.
-- **Escalate with:** The error line, project slug, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, project slug, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_RUN
 
 - **Meaning:** The feedback run id is absent from this session or not reachable by this principal.
 - **Who fixes:** you.
 - **Self-fix:** Use the `run_id` from that session's assistant message and do not accept arbitrary browser ids.
-- **Escalate with:** The error line, session/run ids, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, session/run ids, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_SESSION
 
 - **Meaning:** The session is missing, expired, belongs to another surface, or is not reachable by this token.
 - **Who fixes:** you.
 - **Self-fix:** Rehydrate only ids stored for this project/principal/tenant; open a new session when the old one expired.
-- **Escalate with:** The error line, session id, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, session id, and `rp project chat doctor --bundle`.
 
 ## UNKNOWN_TENANT
 
@@ -1001,21 +1001,21 @@ stays so existing links keep resolving.
 - **Self-fix:** Use the exact active tenant slug ReplyPen returns; map authenticated app context to
   the operator-provided slug, never free-form browser input, and never fall back to project-wide
   resolution.
-- **Escalate with:** The error line, project slug, redacted tenant slug, and `rc project chat doctor --bundle`.
+- **Escalate with:** The error line, project slug, redacted tenant slug, and `rp project chat doctor --bundle`.
 
 ## UNSUPPORTED_TYPE
 
 - **Meaning:** Uploaded bytes do not match an allowed file type or the declared type is misleading.
 - **Who fixes:** you.
 - **Self-fix:** Validate actual file bytes and upload a supported image, PDF, CSV, text, JSON, or spreadsheet type.
-- **Escalate with:** The error line and file name/declared/detected type without contents plus `rc project chat doctor --bundle`.
+- **Escalate with:** The error line and file name/declared/detected type without contents plus `rp project chat doctor --bundle`.
 
 ## WIDGET_LOADER_NOT_FOUND
 
 - **Meaning:** The browser received `404` for `/chat/widget/v1/loader.js`.
 - **Who fixes:** you.
 - **Self-fix:** Use `https://app.replypen.com/chat/widget/v1/loader.js?v=4` exactly and remove proxy path rewriting.
-- **Escalate with:** The console error, requested URL without token/query data, and `rc project chat doctor --bundle`.
+- **Escalate with:** The console error, requested URL without token/query data, and `rp project chat doctor --bundle`.
 
 ## WIDGET_MODE_INVALID
 
@@ -1029,14 +1029,14 @@ stays so existing links keep resolving.
 - **Meaning:** The loader ran but the chat panel did not start: its iframe failed to load, or loaded an error page (`404`, `5xx`, offline) instead of the panel. The loader reloads the panel by itself for about two minutes, so a brief ReplyPen outage recovers without a page refresh.
 - **Who fixes:** operator.
 - **Self-fix:** If the chat appears within two minutes, it was a transient outage; nothing to do. If it stays blank, confirm the project, origin, and CSP, then reproduce once without browser extensions or a rewriting proxy.
-- **Escalate with:** The console error, non-secret origin, browser/network status, and `rc project chat doctor --bundle`.
+- **Escalate with:** The console error, non-secret origin, browser/network status, and `rp project chat doctor --bundle`.
 
 ## WIDGET_SCRIPT_BLOCKED
 
 - **Meaning:** The host page's Content Security Policy or a browser blocker refused the loader script.
 - **Who fixes:** you.
 - **Self-fix:** Add `https://app.replypen.com` to `script-src`, `frame-src`, and `connect-src`; do not add unsafe directives.
-- **Escalate with:** The console CSP line, redacted CSP directives, and `rc project chat doctor --bundle`.
+- **Escalate with:** The console CSP line, redacted CSP directives, and `rp project chat doctor --bundle`.
 
 ## WIDGET_TARGET_INVALID
 

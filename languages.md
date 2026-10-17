@@ -5,11 +5,11 @@ row.
 
 | Repo | Role | Status | Runtime token | Vendored fixtures |
 |---|---|---|---|---|
-| `rootcause` | **host** — the other side of every plane | live | — | private conformance fixtures |
-| `rootcause-embassy-ruby` | Ruby Embassy (Rails/Rack), gem `rootcause-embassy` | v0.12.0 (hub 6d2c818, consumed from git main); action/analysis/chat/API parity + typed diagnostics; `credentials` claim pending | `ruby` (in-process eval) | `spec/fixtures/contract/` |
-| `rootcause-embassy-go` | Go Embassy, module `github.com/rootcause-org/rootcause-embassy-go` | live, 0.5.0 (hub 6d2c818) | `go` (yaegi) | `internal/contract/testdata/` |
+| `replypen` | **host** — the other side of every plane | live | — | private conformance fixtures |
+| `replypen-embassy-ruby` | Ruby Embassy (Rails/Rack), gem `replypen-embassy` | v0.12.0 (hub 6d2c818, consumed from git main); action/analysis/chat/API parity + typed diagnostics; `credentials` claim pending | `ruby` (in-process eval) | `spec/fixtures/contract/` |
+| `replypen-embassy-go` | Go Embassy, module `github.com/replypen/replypen-embassy-go` | live, 0.5.0 (hub 6d2c818) | `go` (yaegi) | `internal/contract/testdata/` |
 | PHP | Laravel/Symfony Embassy | planned | `php` | — |
-| `rootcause-embassy-python` | Python Embassy (Litestar/FastAPI/Django), package `rootcause_embassy`, `github.com/rootcause-org/rootcause-embassy-python` | live, 0.3.0 (hub 6d2c818); `credentials` claim pending | `python` (via registered runner, decision 12) | `tests/contract/testdata/` |
+| `replypen-embassy-python` | Python Embassy (Litestar/FastAPI/Django), package `replypen_embassy`, `github.com/replypen/replypen-embassy-python` | live, 0.3.0 (hub 6d2c818); `credentials` claim pending | `python` (via registered runner, decision 12) | `tests/contract/testdata/` |
 | Node | Express/Nest Embassy | planned | `node` | — |
 
 ## Per-plane coverage
@@ -30,6 +30,6 @@ row.
 3. Implement, in this order: signing → replay → schema → resolve → execute → result envelope →
    analysis planes → chat mint → api plane → health.
 4. Conformance suite per [`AGENTS.md`](AGENTS.md) rule 3, wired into CI.
-5. Create the public `rootcause-org/<repo>` GitHub repo, add its SSH `origin`, push full `main`, and
+5. Create the public `replypen/<repo>` GitHub repo, add its SSH `origin`, push full `main`, and
    verify local `HEAD == origin/main` plus a clean worktree. If the task explicitly forbids this,
    record publication as pending in the implementation row and handoff.

@@ -36,13 +36,14 @@ You:
 
 | Secret | Typical app environment | Purpose | Never lives in |
 | --- | --- | --- | --- |
-| chat signing secret | `ROOTCAUSE_CHAT_SECRET` | HS256 chat token minting | browser, widget tag, logs |
-| action reverse secret | `ROOTCAUSE_ACTION_SECRET` | HMAC for host ↔ Embassy actions and analysis | browser, chat token, logs |
+| chat signing secret | `REPLYPEN_CHAT_SECRET` | HS256 chat token minting | browser, widget tag, logs |
+| action reverse secret | `REPLYPEN_ACTION_SECRET` | HMAC for host ↔ Embassy actions and analysis | browser, chat token, logs |
 
 The operator may call the chat secret `webhook_secret` and the action secret
-`action_reverse_secret`. The Embassy libraries use the `ROOTCAUSE_*` names above. Also set
-`ROOTCAUSE_CHAT_PROJECT=<project-slug>` and
-`ROOTCAUSE_CHAT_BASE_URL=https://app.replypen.com`. Set the base URL explicitly in every language;
+`action_reverse_secret`. The Embassy libraries read the `REPLYPEN_*` names above, falling back to
+the legacy `ROOTCAUSE_*` names (`ROOTCAUSE_CHAT_SECRET`, …) so existing deployments keep working. Also set
+`REPLYPEN_CHAT_PROJECT=<project-slug>` and
+`REPLYPEN_CHAT_BASE_URL=https://app.replypen.com`. Set the base URL explicitly in every language;
 standalone token minting does not need it, but widget rendering does.
 
 ## Send this request to the operator
@@ -64,28 +65,28 @@ and confirm the registered origins, principal manifest, and operator-capped acti
 An origin is the exact `scheme://host[:port]`. Paths, wildcards, trailing slashes, and sibling
 subdomains do not match.
 
-## Install and authenticate `rc`
+## Install and authenticate `rp`
 
 macOS:
 
 ```sh
-brew install rootcause-org/tap/rc
+brew install --cask replypen/tap/rp
 ```
 
 Linux or WSL:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/rootcause-org/rootcause-cli/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/replypen/replypen-cli/main/scripts/install.sh | sh
 ```
 
 Then:
 
 ```sh
-rc auth login
-rc auth access
+rp auth login
+rp auth access
 ```
 
-`rc auth access` must show the project and the configuration/diagnostic access needed by the steps
+`rp auth access` must show the project and the configuration/diagnostic access needed by the steps
 below. Ask the operator if the project or a required permission is absent.
 
 ## Integration checklist
@@ -103,24 +104,24 @@ below. Ask the operator if the project or a required permission is absent.
 - [ ] [`errors.md`](errors.md): every surfaced code has been followed to its self-fix steps.
 - [ ] [`escalate.md`](escalate.md): redacted bundle captured if the operator must help.
 
-## Self-service commands (`rc >= 1.22.0`)
+## Self-service commands (`rp`, or `rc >= 1.22.0`)
 
 Use an authenticated, project-scoped `rc` profile (or add `--project <slug>` to each command):
 
 ```sh
-rc project chat get
-rc project chat set chat_enabled=true chat_origins=https://app.acme.example
-rc project chat secret rotate
-rc project chat secret reveal
-rc project chat token --origin https://app.acme.example \
+rp project chat get
+rp project chat set chat_enabled=true chat_origins=https://app.acme.example
+rp project chat secret rotate
+rp project chat secret reveal
+rp project chat token --origin https://app.acme.example \
   --principal-kind acme_user --principal-id <external-id> [--tenant <tenant-slug>]
-rc project chat send <message> [--token <token>] [--origin https://app.acme.example]
-rc project chat doctor [--origin https://app.acme.example] \
+rp project chat send <message> [--token <token>] [--origin https://app.acme.example]
+rp project chat doctor [--origin https://app.acme.example] \
   [--principal-kind acme_user] [--bundle]
-rc project chat brief [--tenant <tenant-slug>] [--target bubble|page] \
+rp project chat brief [--tenant <tenant-slug>] [--target bubble|page] \
   [--locale en|nl|fr] [--color-scheme light|dark]
-rc project principals get
-rc project principals set <json-or-yaml-file>
+rp project principals get
+rp project principals set <json-or-yaml-file>
 ```
 
 `chat secret rotate` and `chat secret reveal` print plaintext once; redirect them only to an approved

@@ -19,7 +19,7 @@ verification commands, and a fenced `replypen_brief: v1` YAML block—never a to
 The same output is available headlessly:
 
 ```sh
-rc project chat brief --project acme [--tenant <slug>] --target bubble
+rp project chat brief --project acme [--tenant <slug>] --target bubble
 ```
 
 ## Resolve the authenticated identity
@@ -29,14 +29,14 @@ project admin can prove the project's host-side `email_lookup` and obtain that I
 matched database row:
 
 ```sh
-rc --project acme project principals resolve --kind acme_user --email authenticated@example.com
+rp --project acme project principals resolve --kind acme_user --email authenticated@example.com
 ```
 
 For a tenant-enabled project, add `--tenant <slug>`. If your backend already has the canonical ID,
 exercise the explicit passthrough instead:
 
 ```sh
-rc --project acme project principals resolve --kind acme_user --external-id user-8f3
+rp --project acme project principals resolve --kind acme_user --external-id user-8f3
 ```
 
 Exactly one of `--email` or `--external-id` is required. Resolution is project-admin-only, audited
@@ -51,7 +51,7 @@ Mint an HS256 JWT with the chat signing secret. The payload is:
 ```json
 {
   "sub": "user-8f3",
-  "aud": "rootcause:chat:acme",
+  "aud": "replypen:chat:acme",
   "iss": "acme",
   "jti": "88888888-8888-8888-8888-888888888888",
   "origin": "https://app.acme.example",
@@ -73,7 +73,7 @@ Mint an HS256 JWT with the chat signing secret. The payload is:
 | Claim | Rule |
 | --- | --- |
 | `sub` | stable app identity; normally the principal external id |
-| `aud` | exactly `rootcause:chat:<project-slug>` |
+| `aud` | exactly `replypen:chat:<project-slug>` (the legacy `rootcause:chat:<project-slug>` is still accepted) |
 | `iss` | exactly the project slug |
 | `jti` | fresh UUID for every mint; single-use when opening a session |
 | `origin` | exact browser `scheme://host[:port]` and allowlisted for the project |
@@ -83,7 +83,7 @@ Mint an HS256 JWT with the chat signing secret. The payload is:
 | `locale`, `color_scheme` | optional presentation hints; grant no access |
 | `credentials` | optional env name → string map handed to the agent's runs; see below |
 
-Use [`../../fixtures/chat/jwt_vector.json`](../../fixtures/chat/jwt_vector.json) to prove byte-exact
+Use [`../../fixtures/chat/jwt_vector_replypen.json`](../../fixtures/chat/jwt_vector_replypen.json) to prove byte-exact
 minting. A principal kind is a project-owned namespace such as `acme_user`; do not reuse a generic
 `user` kind across unrelated identity systems. A principal never comes from browser input or model
 output.
@@ -292,7 +292,7 @@ The widget supplies the embedding origin when an iframe's own browser origin dif
 clients should use the widget rather than inventing that bridge. JSON errors use:
 
 ```json
-{"error":{"code":"ORIGIN_NOT_ALLOWED","hint":"Register this exact scheme://host[:port] in chat_origins.","docs":"https://github.com/rootcause-org/rootcause-embassy/blob/main/docs/integrator/errors.md#origin_not_allowed"}}
+{"error":{"code":"ORIGIN_NOT_ALLOWED","hint":"Register this exact scheme://host[:port] in chat_origins.","docs":"https://github.com/replypen/replypen-embassy/blob/main/docs/integrator/errors.md#origin_not_allowed"}}
 ```
 
 ### Open session
@@ -380,13 +380,13 @@ conversation; repeated `--answer key=value` flags answer the latest `data-questi
 declared question types:
 
 ```sh
-rc --project acme project chat send 'Show my latest invoice' --token '<embed-token>'
-rc --project acme project chat send --token '<fresh-token>' --session '<uuid>' --answer area=billing
+rp --project acme project chat send 'Show my latest invoice' --token '<embed-token>'
+rp --project acme project chat send --token '<fresh-token>' --session '<uuid>' --answer area=billing
 ```
 
 The command exits non-zero for host 4xx/5xx responses and SSE `error` frames. If the stream started,
-its final line is `run_id: <id>`; use `rc --project acme run list --session <uuid>` to recover every
-run in that conversation and drill into one with `rc run debug <run-id>`.
+its final line is `run_id: <id>`; use `rp --project acme run list --session <uuid>` to recover every
+run in that conversation and drill into one with `rp run debug <run-id>`.
 
 ### Read one session
 

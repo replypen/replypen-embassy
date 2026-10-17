@@ -235,7 +235,7 @@ only controls which signed flat invocation a strict deployment accepts.
 
 ## 14. A shared Embassy selects the reverse secret by signed `project_id`
 
-One app mount may serve several rootcause projects. A single deployment-wide reverse secret would let
+One app mount may serve several ReplyPen projects. A single deployment-wide reverse secret would let
 one project's leaked key authenticate as every sibling, even though the host already stores and signs
 with a distinct key per project.
 
@@ -433,7 +433,7 @@ turn.
 
 No fan-out: no JWT claim, no signed edge, no widget-tag attribute and no loader revision changed, so
 the SDK fixtures, the chat JWT vector and the signing vectors are untouched and the Ruby, Go and Python
-Embassies have nothing to conform to. The rootcause host and its hosted loader are the only
+Embassies have nothing to conform to. The ReplyPen host and its hosted loader are the only
 implementations.
 
 ## 25. Per-message project context and queued snapshots (`?v=5`)
@@ -473,6 +473,21 @@ origin and a tag can't turn the bubble into a third-party beacon. The browser lo
 Presentational only: no JWT claim, no signed edge, no fixture, no SDK helper (persistent-mode hosts
 build their own tag anyway) and **no loader revision bump** — a browser holding the previous cached
 loader for up to an hour ignores the new attributes and shows the default bubble, which is safe.
+
+## 27. ReplyPen names, legacy rootcause names accepted
+
+rootcause was the codename; the product is ReplyPen. Installed Embassies keep running unchanged, so
+every rename is additive on the reading side:
+
+- **Chat `aud`**: canonical `replypen:chat:<project>`; the host also accepts the legacy
+  `rootcause:chat:<project>`, each compared exactly. Embassies mint the new form only after the host
+  accepts both. New goldens `jwt_vector_replypen.json` / `jwt_vector_credentials_replypen.json`; the
+  legacy vectors stay byte-identical.
+- **Env names**: canonical `REPLYPEN_*`; libraries fall back to the matching `ROOTCAUSE_*` when the
+  new name is unset. Explicit config always wins.
+- **Unchanged wire**: mount paths `/rootcause/action` and `/rootcause/result`, the
+  `rootcause-action(<digest>)` eval filename, `data-rc-*` attributes, `RC_*` runtime env, the HMAC
+  envelope, OAuth and token ids. Renaming any of these needs a customer deploy, for no product gain.
 
 ## Fixture reconciliation notes
 

@@ -129,7 +129,7 @@ scope each query with that binding. Project rule `actions-only-host-stamped-env`
   implementations delete any inherited `RC_ACTION_RUN_ID`, then set it from the verified invocation; an
   in-process Embassy may pass it as a typed argument. Cleared/restored afterwards, so stale process env
   cannot name a prior execution. A malformed value refuses as `400 invalid_request`.
-- A script that hands its origin to another rootcause plane (an analysis trigger's
+- A script that hands its origin to another ReplyPen plane (an analysis trigger's
   [`context_refs`](analysis.md#context-references)) reads this value only — never a param, user text
   or a model-supplied hint. Possessing the id grants nothing by itself; the host authorizes every use
   from its own rows.

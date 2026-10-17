@@ -1,6 +1,6 @@
 # API plane — generic authenticated caller
 
-The only plane that is **not** HMAC-signed. An Embassy calls rootcause's ordinary HTTP API — the same
+The only plane that is **not** HMAC-signed. An Embassy calls ReplyPen's ordinary HTTP API — the same
 surface the `rc` CLI drives — with `Authorization: Bearer …`.
 
 **Generic by design**: transport + auth only, never per-endpoint wrappers, so a new host endpoint is
@@ -14,7 +14,7 @@ with caches that never mix.
 
 ## OAuth refresh exchange
 
-rootcause's API takes a short-lived (1h) access token `rcoa_…`. An Embassy is provisioned a
+ReplyPen's API takes a short-lived (1h) access token `rcoa_…`. An Embassy is provisioned a
 long-lived, **non-rotating** refresh token `rcor_…` and exchanges it:
 
 ```

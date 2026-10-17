@@ -1,6 +1,6 @@
 # Analysis plane
 
-The opposite direction from actions: the customer's own code asks rootcause *"analyze this"* and gets
+The opposite direction from actions: the customer's own code asks ReplyPen *"analyze this"* and gets
 the drafted answer back **later**, keyed to one of its own resources — no polling, no callback rig of
 its own. Same `action_reverse_secret`, same signing primitives, no new key.
 
@@ -42,7 +42,7 @@ Goldens: [`trigger.json`](../fixtures/analysis/trigger.json),
 ```
 
 - `body` is **required**, plain text only. `subject` optional.
-- `metadata` is **free-form** here (scalars, small, no secrets/PII — it transits rootcause and comes
+- `metadata` is **free-form** here (scalars, small, no secrets/PII — it transits ReplyPen and comes
   back verbatim). Unlike sent-message metadata, which is fixed by the sent-message capture route below.
 - `session_id` optional; omit on turn 1. An **unknown** id is treated as fresh, so a caller may choose
   its own from turn 1. Max 200 chars.
@@ -171,7 +171,7 @@ Goldens: [`sent_message.json`](../fixtures/analysis/sent_message.json),
   "type": "sent_message",
   "session_id": "<uuid>",
   "sent": {"body":"what actually left the building","sender":"Jane"},
-  "proposed": {"body":"what rootcause proposed"},
+  "proposed": {"body":"what ReplyPen proposed"},
   "metadata": {"resource_type":"SupportTicket","resource_id":"42"},
   "answers": [{"id":"country","values":["BE"]}],
   "nonce": "<uuid>",
@@ -184,7 +184,7 @@ Goldens: [`sent_message.json`](../fixtures/analysis/sent_message.json),
   ([decision 5](../decisions.md#5-sent-message-metadata-is-fixed)). `resource_id` becomes the join
   handle (falling back to `session_id` when absent).
 - `session_id` is **required**.
-- `sent.body` is the human's actually-sent reply; `proposed.body` is what rootcause proposed. Omit
+- `sent.body` is the human's actually-sent reply; `proposed.body` is what ReplyPen proposed. Omit
   `proposed` to treat the reply as pure signal. The host computes the proposed-vs-sent delta.
 - **`answers[]`** are a reviewer's answers to a prior run's `questions[]`. They ride the **same**
   route and may coexist with a sent body or arrive alone. The host re-runs the most recent

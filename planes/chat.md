@@ -2,15 +2,18 @@
 
 One-directional, and the only plane on a **different key**. The customer's backend mints a
 short-lived HS256 JWT asserting *who is chatting* (and, on a tenant-enabled project, *inside which
-tenant*). The browser carries it to rootcause, which only ever **verifies**. The browser never sees
+tenant*). The browser carries it to ReplyPen, which only ever **verifies**. The browser never sees
 the key, so it cannot mint a token for another user, tenant, origin, or a later expiry.
 
 **Key: `webhook_secret`.** Never `action_reverse_secret`, no fallback in either direction — a leaked
 chat key must not buy action execution.
 
-Golden: [`fixtures/chat/jwt_vector.json`](../fixtures/chat/jwt_vector.json) (fixed secret + claims +
-`iat` → the exact token string), [`jwt_vector_credentials.json`](../fixtures/chat/jwt_vector_credentials.json)
-(the same plus a `credentials` claim) and [`widget_tag.html`](../fixtures/chat/widget_tag.html).
+Golden: [`fixtures/chat/jwt_vector_replypen.json`](../fixtures/chat/jwt_vector_replypen.json) (fixed
+secret + claims + `iat` → the exact token string),
+[`jwt_vector_credentials_replypen.json`](../fixtures/chat/jwt_vector_credentials_replypen.json) (the same
+plus a `credentials` claim) and [`widget_tag.html`](../fixtures/chat/widget_tag.html). The legacy-`aud`
+twins [`jwt_vector.json`](../fixtures/chat/jwt_vector.json) and
+[`jwt_vector_credentials.json`](../fixtures/chat/jwt_vector_credentials.json) stay as verify goldens.
 
 ## The token
 
@@ -21,7 +24,7 @@ over the **exact transmitted segments** — never a re-encode.
 ```json
 {
   "sub": "<external_id>",
-  "aud": "rootcause:chat:<project>",
+  "aud": "replypen:chat:<project>",
   "iss": "<project>",
   "jti": "<uuid>",
   "origin": "https://admin.example.com",
@@ -42,7 +45,11 @@ over the **exact transmitted segments** — never a re-encode.
 - **`alg` is checked BEFORE the signature** and must be `HS256`. `none` and every asymmetric alg are
   rejected outright — never let `alg` pick the verifier.
 - **Required**: `jti` and `exp`. A missing `exp` is a refusal, not an infinite token.
-- **`aud` must equal `rootcause:chat:<project>` exactly**; **`iss` must equal the project name**.
+- **`aud` must equal `replypen:chat:<project>` exactly**; **`iss` must equal the project name**. The
+  host also accepts the legacy `rootcause:chat:<project>` byte-for-byte, so tokens minted by an
+  Embassy older than the rename keep verifying
+  ([decision 27](../decisions.md#27-replypen-names-legacy-rootcause-names-accepted)). Embassies mint
+  the `replypen:` form.
 - **±60s leeway** on `exp` / `nbf` / `iat`. `nbf` and `iat` are optional; when present they are
   checked.
 - **`jti` is single-use** — burned host-side when a session opens, so a captured token cannot be
@@ -59,7 +66,7 @@ over the **exact transmitted segments** — never a re-encode.
 - **`principal`** mirrors the analysis-plane principal exactly, so it feeds the same scoping pipe.
   `assurance` defaults to `"customer_backend_jwt"` (asserted by the customer's own authenticated
   server session); `asserted_by` defaults to the project.
-- **`tenant`** is the rootcause tenant **slug**, and must come from the server-side authorized tenant
+- **`tenant`** is the ReplyPen tenant **slug**, and must come from the server-side authorized tenant
   context — never client input. Every claim is inside the signature, so a swapped tenant is a broken
   token.
 - **`locale` / `color_scheme`** are presentation hints only, deliberately unvalidated: an unsupported

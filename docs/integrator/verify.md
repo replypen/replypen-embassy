@@ -3,11 +3,11 @@
 Run the doctor first when stuck:
 
 ```sh
-rc project chat doctor [--origin https://app.acme.example] [--principal-kind acme_user] [--since 30m|1h|24h]
-rc dev action doctor <action-id>
+rp project chat doctor [--origin https://app.acme.example] [--principal-kind acme_user] [--since 30m|1h|24h]
+rp dev action doctor <action-id>
 ```
 
-Chat doctor requires `rc >= 1.22.0`. Use `--bundle` only for escalation, because its output is shaped
+Chat doctor requires `rp`, or `rc >= 1.22.0`. Use `--bundle` only for escalation, because its output is shaped
 for sharing. Rungs 1–2 are fully local. Rungs 3–6 require the operator to have supplied the secret and
 confirmed project, origins, principal kinds, and tenants. Complete each rung in order; a higher rung
 does not replace a lower one.
@@ -17,7 +17,7 @@ does not replace a lower one.
 1. Unit vector
 
    Command: run your language package's chat/conformance test against
-   `fixtures/chat/jwt_vector.json`.
+   `fixtures/chat/jwt_vector_replypen.json`.
 
    Expect: byte-exact `signing_input` and `token` match.
 
@@ -42,7 +42,7 @@ does not replace a lower one.
    Command (project admin):
 
    ```sh
-   rc --project acme project principals resolve --kind acme_user --email authenticated@example.com
+   rp --project acme project principals resolve --kind acme_user --email authenticated@example.com
    ```
 
    Add `--tenant <slug>` for a tenant-enabled project. If the app already stores the canonical ID,
@@ -95,8 +95,8 @@ does not replace a lower one.
    CLI equivalent:
 
    ```sh
-   rc --project acme project chat send 'Hello' --token '<page-token>'
-   rc --project acme run list --session '<uuid>'
+   rp --project acme project chat send 'Hello' --token '<page-token>'
+   rp --project acme run list --session '<uuid>'
    ```
 
    Expect the send's final line to name the run ID. A host error response or SSE `error` must produce
@@ -122,8 +122,8 @@ does not replace a lower one.
    Command:
 
    ```sh
-   rc dev action doctor <action-id>
-   rc dev action doctor <action-id> --params '{"...":"..."}'   # adds the dry-run preflight
+   rp dev action doctor <action-id>
+   rp dev action doctor <action-id> --params '{"...":"..."}'   # adds the dry-run preflight
    ```
 
    Expect: resolution ok, mount present, signed protocol `1` health with the Embassy version and
@@ -133,7 +133,7 @@ does not replace a lower one.
 
    ```sh
    curl -i -X GET <mount>                                     # expect 405 + Allow: POST
-   sig=$(printf 'project_id=<uuid>' | openssl dgst -sha256 -hmac "$ROOTCAUSE_ACTION_SECRET" -r | cut -d' ' -f1)
+   sig=$(printf 'project_id=<uuid>' | openssl dgst -sha256 -hmac "$REPLYPEN_ACTION_SECRET" -r | cut -d' ' -f1)
    curl -i "<mount>/health?project_id=<uuid>" -H "X-Webhook-Signature: sha256=$sig"
    ```
 
@@ -148,7 +148,7 @@ does not replace a lower one.
 
    ```sh
    rc ask 'Exercise the new integration without changing data'
-   rc run debug <run-id>
+   rp run debug <run-id>
    ```
 
    Expect: the run completes and the debug artifact shows the intended grounded path without secrets.
@@ -162,5 +162,5 @@ does not replace a lower one.
 
    Expect: `proposed → executing → succeeded`, one intended change, and a signed Embassy result.
 
-   On failure or uncertain outcome: do not retry blindly. Run `rc dev action doctor <action-id> --bundle` and
+   On failure or uncertain outcome: do not retry blindly. Run `rp dev action doctor <action-id> --bundle` and
    escalate.

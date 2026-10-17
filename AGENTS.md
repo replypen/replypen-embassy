@@ -21,7 +21,7 @@ A change that lands in a language repo first is a bug. Bring it back here before
 
 ## Rule 2 — fan out, one subagent per repo
 
-Spawn **one subagent per entry in [`languages.md`](languages.md)**, in parallel. The rootcause host
+Spawn **one subagent per entry in [`languages.md`](languages.md)**, in parallel. The ReplyPen host
 is one of those entries — it is not special.
 
 Each subagent's prompt is:
@@ -39,7 +39,7 @@ checked with `diff -r`.
 
 For a **new** language repo, publication is part of done unless the task explicitly opts out:
 
-1. Create the public GitHub repo under `rootcause-org`, matching the sibling Embassy repos.
+1. Create the public GitHub repo under `replypen`, matching the sibling Embassy repos.
 2. Add the SSH `origin`, push the full local `main` history and set its upstream.
 3. Verify local `HEAD` equals `origin/main`, the worktree is clean, and the GitHub default branch is
    `main`.
@@ -105,3 +105,14 @@ this is not.
 **thread** / **message** · **principal** (not sender/user) · **claim** · **workspace** (not sandbox) ·
 **brain** · **mirror** (not repo) · **tool** (bash/reply only) · **draft** · **note** · **journal** ·
 **action** (not effect; **not** an alias for tool) · **Embassy** (not gem/action-runner).
+
+## Legacy names kept
+
+ReplyPen was codenamed rootcause ([decision 27](decisions.md#27-replypen-names-legacy-rootcause-names-accepted)). Kept on purpose:
+
+- `rootcause:chat:<project>` JWT `aud` — accepted by the host so tokens from un-bumped Embassies verify; legacy vectors stay.
+- `ROOTCAUSE_*` env — fallback read by every library; customer deploys set these today.
+- `/rootcause/action`, `/rootcause/result` mount defaults — stored as full URLs host-side and routed by customer apps.
+- `rootcause-action(<digest>)` eval filename in `result_action_error.json` — host replays the fixture byte-for-byte.
+- `window.RootCause(...)` loader global in chat docs — the host owns the loader; flip the docs when it ships `window.ReplyPen`.
+- `RootCause::` / `rootcause_embassy` / `github.com/rootcause-org/rootcause-embassy-go` — compat aliases or old module path in the language repos.

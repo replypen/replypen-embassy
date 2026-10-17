@@ -45,8 +45,8 @@ Run these before any real action:
 Start troubleshooting with:
 
 ```sh
-rc dev action doctor <action-id>
-rc dev action doctor <action-id> --params '{"...":"..."}' --bundle
+rp dev action doctor <action-id>
+rp dev action doctor <action-id> --params '{"...":"..."}' --bundle
 ```
 
 It runs resolution, the mount and signed-health probes, and (with `--params`) the dry-run preflight.
