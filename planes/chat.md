@@ -118,7 +118,7 @@ over the **exact transmitted segments** — never a re-encode.
   (absolute URL whose origin is one of the project's `chat_origins`; anything else falls back to the
   default glyph), `data-rc-launcher-background` (hex, the launcher bubble only), `data-rc-name`
   (panel header name, ≤ 40 chars) and `data-rc-logo` (panel header image, same origin rule as the
-  launcher icon). Same keys as `RootCause('boot', {theme, launcherIcon, launcherBackground, name,
+  launcher icon). Same keys as `ReplyPen('boot', {theme, launcherIcon, launcherBackground, name,
   logo})`. Invalid values are ignored.
 - **Mint a fresh token per render.** Tokens are short-lived and single-use — never cache one across
   renders.
@@ -134,7 +134,7 @@ Turbo (Hotwire) soft navigations, or a host **shell** whose same-origin inner if
 navigation (DentAI). Other SPAs/routers are not supported. Implementations add no helper for it — a host
 builds its own tag from the chat token minter and the loader path/revision constants.
 
-- **No `data-rc-token`.** The host queues `RootCause('boot', {refreshToken})` on the standard stub
+- **No `data-rc-token`.** The host queues `ReplyPen('boot', {refreshToken})` on the standard stub
   **before** the loader tag. `refreshToken: () => Promise<string>` calls the host's own authenticated
   endpoint; the loader is its only caller and never adopts a token rendered into HTML. A rejection
   carrying `{status: 401|403}` fails closed: the embed is removed.
@@ -153,11 +153,11 @@ builds its own tag from the chat token minter and the loader path/revision const
 - **`data-rc-target`** (optional placeholder selector): where present the conversation covers it
   (`page`); elsewhere it floats compact on the right, expandable to a viewport overlay or minimized to
   the launcher (which shows a running recording timer).
-- API additions: `RootCause('presentation', 'page'|'compact'|'expanded'|'minimized')`,
-  `RootCause('destroy')` and `RootCause('leave', proceed)` — a host-initiated scope boundary for hosts
+- API additions: `ReplyPen('presentation', 'page'|'compact'|'expanded'|'minimized')`,
+  `ReplyPen('destroy')` and `ReplyPen('leave', proceed)` — a host-initiated scope boundary for hosts
   without Turbo: same guard as a foreign-scope render (capture stops, stay/discard prompt when unsent
   work exists); `proceed` runs exactly once after destroy (or at once when nothing is live), never on
-  stay. `RootCause('on', 'capture', cb)` reports the panel's take `{startedAt, screen}` (0 = none).
+  stay. `ReplyPen('on', 'capture', cb)` reports the panel's take `{startedAt, screen}` (0 = none).
   `boot`/`update`/`show`/`hide` are unchanged; in persistent mode `update` ignores a token (the hook is
   the only source). Loader revision `?v=6` carries both.
 
@@ -194,7 +194,7 @@ never fetches the URL. Neither is a message part or system/HiddenContext instruc
 Register the project-specific callback before the loader executes:
 
 ```js
-RootCause('boot', {
+ReplyPen('boot', {
   getPageContext: function () { return '# Current selection\nResource: people\nSelected IDs: …'; }
 });
 ```

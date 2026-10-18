@@ -112,7 +112,7 @@ ReplyPen was codenamed rootcause ([decision 27](decisions.md#27-replypen-names-l
 
 - `rootcause:chat:<project>` JWT `aud` — accepted by the host so tokens from un-bumped Embassies verify; legacy vectors stay.
 - `ROOTCAUSE_*` env — fallback read by every library; customer deploys set these today.
-- `/rootcause/action`, `/rootcause/result` mount defaults — stored as full URLs host-side and routed by customer apps.
+- `/rootcause/action`, `/rootcause/result` — still valid mounts and the Ruby gem's config defaults (installed apps route them); new installs mount `/replypen/action|result` ([decision 28](decisions.md#28-replypen-mount-paths-and-loader-global)).
 - `rootcause-action(<digest>)` eval filename in `result_action_error.json` — host replays the fixture byte-for-byte.
-- `window.RootCause(...)` loader global in chat docs — the host owns the loader; flip the docs when it ships `window.ReplyPen`.
+- `window.RootCause` — permanent alias of the loader's `window.ReplyPen` global; docs show `ReplyPen(...)`.
 - `RootCause::` / `rootcause_embassy` / `github.com/rootcause-org/rootcause-embassy-go` — compat aliases or old module path in the language repos.

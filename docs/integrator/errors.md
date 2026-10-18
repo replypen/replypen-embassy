@@ -640,7 +640,7 @@ stays so existing links keep resolving.
 
 - **Meaning:** A persistent (`data-rc-persist="turbo"`) loader booted without a `refreshToken` hook, so it has no token source.
 - **Who fixes:** you.
-- **Self-fix:** Queue `RootCause('boot', {refreshToken})` on the stub before the loader tag; see [persistent mode](chat.md#persistent-mode-turbo).
+- **Self-fix:** Queue `ReplyPen('boot', {refreshToken})` on the stub before the loader tag; see [persistent mode](chat.md#persistent-mode-turbo).
 - **Escalate with:** The error line and `rp project chat doctor --bundle`.
 
 ## NO_TOKEN

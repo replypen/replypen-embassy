@@ -56,7 +56,7 @@ Please prepare ReplyPen integration for:
 - browser origins: https://app.acme.example, https://staging.acme.example
 - principal kind: acme_user
 - tenant claim: required / not used
-- Embassy action mount URL: https://api.acme.example/rootcause/action (or: actions not yet enabled)
+- Embassy action mount URL: https://api.acme.example/replypen/action (or: actions not yet enabled)
 
 Please return the chat signing secret and action reverse secret through the agreed secret channel,
 and confirm the registered origins, principal manifest, and operator-capped action autonomy.

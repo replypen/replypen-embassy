@@ -489,6 +489,21 @@ every rename is additive on the reading side:
   `rootcause-action(<digest>)` eval filename, `data-rc-*` attributes, `RC_*` runtime env, the HMAC
   envelope, OAuth and token ids. Renaming any of these needs a customer deploy, for no product gain.
 
+## 28. ReplyPen mount paths and loader global
+
+Supersedes the "unchanged wire" mount paths of [decision 27](#27-replypen-names-legacy-rootcause-names-accepted):
+
+- **Mounts**: new installs mount `/replypen/action` and `/replypen/result`. The host stores
+  `action_runner_url` / `action_result_url` as full URLs and only appends `/health`, so the old
+  `/rootcause/*` mounts stay valid indefinitely. Migrating an app: mount the new paths beside the old
+  ones (same handler), deploy, then repoint with `rp project action-settings set action_runner_url=…
+  action_result_url=…`; keep the old route. The Ruby gem's `mount_at` / `result_mount_at` defaults
+  stay `/rootcause/*`: changing them would silently move every route an installed app draws from the
+  default.
+- **Loader global**: the host loader sets `window.ReplyPen` and `window.RootCause` to the same
+  dispatcher and drains stub queues on both. No loader revision bump: the loader is cached at most an
+  hour, so no pre-rename loader is still in browser caches.
+
 ## Fixture reconciliation notes
 
 The pre-hub goldens existed in two divergent copies. Resolved as follows:
