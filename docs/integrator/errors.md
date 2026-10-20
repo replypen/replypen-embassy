@@ -352,7 +352,7 @@ bundle.
 
 ## CHAT_CREDENTIALS_INVALID
 
-- **Meaning:** The minter refused a `credentials` claim: a key that is not `^[A-Z][A-Z0-9_]{0,63}$` or starts with `RC_`, more than 8 entries, or more than 8 KiB.
+- **Meaning:** The minter refused a `credentials` claim: a key that is not `^[A-Z][A-Z0-9_]{0,63}$` or starts with `RC_`, a value containing NUL, more than 8 entries, or more than 8 KiB.
 - **Who fixes:** you.
 - **Self-fix:** Rename or drop the offending entries; pass only the user-scoped token and its API base.
 - **Escalate with:** The error line and the credential key names (never values).
@@ -429,16 +429,16 @@ bundle.
 
 ## CREDENTIALS_CONFLICT
 
-- **Meaning:** A `credentials` key in the chat token equals one of the project's own env var names, so the session did not open.
+- **Meaning:** A `credentials` key in the chat token or analysis trigger equals one of the project's own env var names, so the session did not open or the analysis was not queued.
 - **Who fixes:** you.
 - **Self-fix:** Rename the credential key (prefix it with your product name); a token never shadows project configuration.
 - **Escalate with:** The error line and the credential key names (never values).
 
 ## CREDENTIALS_INVALID
 
-- **Meaning:** The chat token's `credentials` claim broke a rule: non-string value, a key that is not `^[A-Z][A-Z0-9_]{0,63}$` or starts with `RC_`, more than 8 entries, or more than 8 KiB.
+- **Meaning:** The chat token's or analysis trigger's `credentials` broke a rule: non-string value or one containing NUL, a key that is not `^[A-Z][A-Z0-9_]{0,63}$` or starts with `RC_`, more than 8 entries, more than 8 KiB, or (analysis) no `principal`. An Embassy's analysis client refuses the same rules with this code before sending.
 - **Who fixes:** you.
-- **Self-fix:** Mint with an Embassy minter, which refuses the same rules up front with `CHAT_CREDENTIALS_INVALID`.
+- **Self-fix:** Mint with an Embassy minter or trigger with an Embassy client, which refuse the same rules up front (chat minters with `CHAT_CREDENTIALS_INVALID`).
 - **Escalate with:** The error line and the credential key names (never values).
 
 ## EMBASSY_HEALTH_INVALID

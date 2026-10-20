@@ -77,7 +77,7 @@ over the **exact transmitted segments** — never a re-encode.
   customer's own API, minted by the customer backend for exactly the chatting principal, so the
   agent can act as that user and nothing more. Rules, checked at mint and again by the host:
   - keys match `^[A-Z][A-Z0-9_]{0,63}$` and never start with `RC_` (host-reserved);
-  - at most 8 entries, the claim's JSON at most 8 KiB, values are JSON strings only;
+  - at most 8 entries, the claim's JSON at most 8 KiB, values are JSON strings without NUL;
   - an empty object is the same as absent, so it is omitted.
 
   Any violation refuses the session open with `400 CREDENTIALS_INVALID`; a key that equals one of

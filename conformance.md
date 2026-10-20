@@ -77,8 +77,10 @@ implementation's status in [`languages.md`](languages.md), never copy it.
   `project_id` is an unsigned opaque `401 bad_signature` and never dispatches or records a nonce.
 
 ## Analysis client
-- `trigger.json`, `trigger_with_principal.json`, `trigger_with_context_refs.json`, `sent_message.json`, `answers.json`: structural
+- `trigger.json`, `trigger_with_principal.json`, `trigger_with_context_refs.json`, `trigger_with_credentials.json`, `sent_message.json`, `answers.json`: structural
   equality + top-level key order + signature over the transmitted bytes.
+- `credentials` (chat claim rules) omitted when empty; refused before sending on a bad key, an `RC_`
+  key, a NUL in a value, a 9th entry, more than 8 KiB, or no `principal`.
 - Attachment caps enforced before sending; non-2xx/transport surfaced to the caller.
 
 ## Chat

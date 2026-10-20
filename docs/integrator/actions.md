@@ -95,6 +95,16 @@ pass it back as `context_refs: [{kind: "action_run", id: <stored id>}]` on the a
 action's approved manifest must opt in. Never pass a param, user text or older unverified hint. See
 [context references](../../planes/analysis.md#context-references).
 
+## User-scoped credentials on an analysis
+
+An analysis your code triggers for one user (a ticket's creator) can carry the same `credentials` map
+as the [chat token](chat.md#pass-your-own-user-scoped-api-token): env name → string, minted
+server-side for exactly the trigger's `principal`, so the agent reads your API as that user. Same
+rules and errors (`CREDENTIALS_INVALID`, `CREDENTIALS_CONFLICT`); a trigger without a principal sends
+none. Unlike chat they hold for **that run only**: pass fresh ones on every follow-up trigger, and mint
+them with a TTL covering the run plus retries (≤ 1 h). See the
+[trigger contract](../../planes/analysis.md#1-trigger--post-analysesproject-signed).
+
 ## Chat files on actions
 
 Attachment-enabled actions receive selected chat UUIDs in ordinary params and authorized bytes in a

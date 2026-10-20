@@ -23,7 +23,8 @@ the prior turns. Correlation is `metadata` + `analysis_id`; continuation is `ses
 
 Goldens: [`trigger.json`](../fixtures/analysis/trigger.json),
 [`trigger_with_principal.json`](../fixtures/analysis/trigger_with_principal.json),
-[`trigger_with_context_refs.json`](../fixtures/analysis/trigger_with_context_refs.json).
+[`trigger_with_context_refs.json`](../fixtures/analysis/trigger_with_context_refs.json),
+[`trigger_with_credentials.json`](../fixtures/analysis/trigger_with_credentials.json).
 
 ```json
 {
@@ -35,6 +36,7 @@ Goldens: [`trigger.json`](../fixtures/analysis/trigger.json),
   "context_refs": [{"kind":"action_run","id":"<uuid>"}],
   "principal": {"kind":"…","external_id":"…","asserted_by":"…","assurance":"…",
                 "tenant_hint":"…","source_metadata":{}},
+  "credentials": {"ACME_AGENT_TOKEN":"<user-scoped token>","ACME_API_BASE":"https://api.acme.example"},
   "nonce": "<uuid>",
   "issued_at": "<RFC3339 UTC>",
   "tenant": "acme"
@@ -51,6 +53,17 @@ Goldens: [`trigger.json`](../fixtures/analysis/trigger.json),
   under-scopes, so it is rejected at ingress). `asserted_by` / `assurance` carry the signed channel's
   own trust semantics — no host-side defaulting. `tenant_hint` and `source_metadata` are optional.
   **A principal never originates from model output.**
+- `credentials` is optional ([decision 29](../decisions.md#29-analysis-trigger-carries-credentials)):
+  the chat token's [`credentials`](chat.md#rules-the-host-enforces) claim, same name, same rules —
+  keys `^[A-Z][A-Z0-9_]{0,63}$` and never `RC_`, at most 8 entries, its JSON at most 8 KiB, string
+  values without NUL, an empty object omitted (never `null`). The customer backend mints it
+  server-side for **exactly** this trigger's `principal`: `credentials` without a `principal` is a
+  rule violation, so a tenant-level analysis gets none. It rides inside the HMAC-signed body (no new key). The host seals
+  it for **this run only**, not the session: every follow-up trigger carries its own fresh
+  credentials. Injected as plain workspace env after the project env and before the host's `RC_*`
+  values; never logged, never in prompt text, traces or the result callback; deleted when the run
+  ends. Mint with a short TTL that still covers the run plus host retries (≤ 1 h suggested). Send it
+  only to a host that knows the field: an older host strict-decodes it as an unknown field (`400`).
 - `tenant` optionally binds the run by slug. A tenant-enabled project fails closed without it; a flat
   project ignores it.
 - `attachments` are inline base64 only. Host caps: **4 MiB decoded per attachment**, **6 MiB total**,
@@ -86,7 +99,9 @@ by a chat escalation action asks for analysis with that conversation as evidence
 
 Failure modes, all fail-closed: `404` unknown project · `403` reverse channel disabled / no result URL
 · `401` bad signature or stale `issued_at` · `400` malformed body, blank body, bad tenant slug,
-invalid principal, unknown field, refused context reference (`CONTEXT_REF_REFUSED`) · `409` replayed nonce · `500` internal.
+invalid principal, unknown field, refused context reference (`CONTEXT_REF_REFUSED`), a `credentials`
+rule violation (`CREDENTIALS_INVALID`), a `credentials` key equal to one of the project's own env var
+names (`CREDENTIALS_CONFLICT`) · `409` replayed nonce · `500` internal.
 
 A non-2xx / malformed response / transport failure is surfaced to the **caller** (never swallowed);
 the caller decides whether to retry.

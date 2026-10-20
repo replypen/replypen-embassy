@@ -504,6 +504,29 @@ Supersedes the "unchanged wire" mount paths of [decision 27](#27-replypen-names-
   dispatcher and drains stub queues on both. No loader revision bump: the loader is cached at most an
   hour, so no pre-rename loader is still in browser caches.
 
+## 29. Analysis trigger carries credentials
+
+Entry-point parity with chat: an analysis the customer's own code triggers for a user (a support
+ticket's creator) needs the same user-scoped token for the customer's API that the chat token carries.
+The trigger gets an optional `credentials` object, the chat claim reused exactly — same name, same
+rules, same error codes (`CREDENTIALS_INVALID`, `CREDENTIALS_CONFLICT`) — so one validator and one
+integrator mental model serve both entry points. It rides inside the HMAC-signed body: no new key.
+
+**Per run, not per session.** A chat session is one live conversation with one opening token, so
+[decision 20](#20-the-chat-token-may-carry-per-session-credentials-for-the-customers-own-api) seals
+the claim at open. An analysis session can span days of follow-up triggers (ticket replies, answers),
+each a fresh signed request the customer backend builds anyway; sealing turn 1's token on the session
+would hand later runs an expired or stale credential, and a long-lived one would widen exposure for
+nothing. So the host seals each trigger's credentials for that run alone, injects them as env, and
+deletes them when the run ends; a follow-up carries its own. An answers-spawned rerun has no trigger
+of its own and so runs without credentials.
+
+`credentials` without a `principal` is refused: the token is minted for exactly the asserted user, and
+a tenant-level analysis has no user to mint for. Values may not contain NUL (an env value cannot carry
+one; the host already refused it on chat). Rollout: the trigger is strict-decoded, so the host deploys
+before any Embassy sends the field. Golden:
+[`fixtures/analysis/trigger_with_credentials.json`](fixtures/analysis/trigger_with_credentials.json).
+
 ## Fixture reconciliation notes
 
 The pre-hub goldens existed in two divergent copies. Resolved as follows:

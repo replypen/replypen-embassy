@@ -110,7 +110,7 @@ token, err := chat.MintEmbedToken(chatSecret, chat.Claims{
 
 - Scope the token to what this user may already do. Treat it as readable by the agent: a
   user-scoped token is what makes that harmless. Never pass an admin key or your chat secret.
-- Keys are `^[A-Z][A-Z0-9_]{0,63}$`, never `RC_*`, at most 8 entries and 8 KiB; values are strings.
+- Keys are `^[A-Z][A-Z0-9_]{0,63}$`, never `RC_*`, at most 8 entries and 8 KiB; values are strings without NUL.
   The minter refuses a violation with `CHAT_CREDENTIALS_INVALID`; the host with `CREDENTIALS_INVALID`.
 - A key that equals one of your project's env var names is refused with `CREDENTIALS_CONFLICT`.
 - Credentials are fixed when a conversation opens; a rotated token does **not** refresh them. When
