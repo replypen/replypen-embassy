@@ -527,6 +527,16 @@ one; the host already refused it on chat). Rollout: the trigger is strict-decode
 before any Embassy sends the field. Golden:
 [`fixtures/analysis/trigger_with_credentials.json`](fixtures/analysis/trigger_with_credentials.json).
 
+## 30. Host starter text: `ReplyPen('compose', {text})`
+
+A host entry point ("Ik heb een probleem", "Ik heb een vraag") wants the user to continue a sentence,
+not to have it sent. The panel is cross-origin, so only the loader can carry it. A queueable command
+rather than a `data-rc-*` attribute: the persistent loader tag is rendered on every page, the starter
+belongs to one visit, and a command can't be replayed from a Turbo cache. The panel treats it as
+typing: it lands only in an empty composer (typed text and restored drafts win), keeps the current
+conversation and blocks an automatic resume still loading. No loader revision bump and no SDK change:
+an older cached loader ignores an unknown command, and nothing rides the wire.
+
 ## Fixture reconciliation notes
 
 The pre-hub goldens existed in two divergent copies. Resolved as follows:

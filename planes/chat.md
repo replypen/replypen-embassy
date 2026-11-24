@@ -157,7 +157,8 @@ builds its own tag from the chat token minter and the loader path/revision const
   `ReplyPen('destroy')` and `ReplyPen('leave', proceed)` — a host-initiated scope boundary for hosts
   without Turbo: same guard as a foreign-scope render (capture stops, stay/discard prompt when unsent
   work exists); `proceed` runs exactly once after destroy (or at once when nothing is live), never on
-  stay. `ReplyPen('on', 'capture', cb)` reports the panel's take `{startedAt, screen}` (0 = none).
+  stay. `ReplyPen('compose', {text})` (any mode) puts host starter text in an EMPTY composer, unsent
+  and focused; existing text always wins. `ReplyPen('on', 'capture', cb)` reports the panel's take `{startedAt, screen}` (0 = none).
   `boot`/`update`/`show`/`hide` are unchanged; in persistent mode `update` ignores a token (the hook is
   the only source). Loader revision `?v=6` carries both.
 

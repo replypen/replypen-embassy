@@ -277,6 +277,9 @@ is supported; other SPAs and routers are not.
   launcher (which shows a running recording timer). Drive it with
   `ReplyPen('presentation', 'page'|'compact'|'expanded'|'minimized')`; end it with
   `ReplyPen('destroy')`.
+- **Starter text:** `ReplyPen('compose', {text: 'Ik heb een probleem...'})` (queueable before the
+  loader, works in every mode) puts the text in the composer unsent, focused, cursor at the end. It
+  never replaces text the user already typed or a restored draft, and it never sends.
 - The token is readable by your page's JavaScript, here as with `data-rc-token`. The iframe isolates
   CSS/DOM, not the token from host-page XSS; your CSP and the short, single-use, origin-pinned token
   are the controls.
