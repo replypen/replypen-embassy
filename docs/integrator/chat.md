@@ -195,7 +195,7 @@ Merge these sources into the app's existing directives. `script-src` loads the w
 
 ```html
 <script async
-  src="https://app.replypen.com/chat/widget/v1/loader.js?v=4"
+  src="https://app.replypen.com/chat/widget/v1/loader.js?v=6"
   data-rc-project="acme"
   data-rc-token="<short-lived-token>"
   data-rc-locale="nl"
@@ -207,7 +207,7 @@ Page mode:
 ```html
 <div id="rc-chat" style="height: 100%"></div>
 <script async
-  src="https://app.replypen.com/chat/widget/v1/loader.js?v=4"
+  src="https://app.replypen.com/chat/widget/v1/loader.js?v=6"
   data-rc-project="acme"
   data-rc-token="<short-lived-token>"
   data-rc-mode="page"
@@ -249,7 +249,7 @@ is supported; other SPAs and routers are not.
   });
 </script>
 <script async
-  src="https://app.replypen.com/chat/widget/v1/loader.js?v=4"
+  src="https://app.replypen.com/chat/widget/v1/loader.js?v=6"
   data-rc-project="acme"
   data-rc-persist="turbo"
   data-rc-scope="acme:tenant-42:user-8f3"
@@ -280,6 +280,17 @@ is supported; other SPAs and routers are not.
 - **Starter text:** `ReplyPen('compose', {text: 'Ik heb een probleem...'})` (queueable before the
   loader, works in every mode) puts the text in the composer unsent, focused, cursor at the end. It
   never replaces text the user already typed or a restored draft, and it never sends.
+- **Ask from your own page:** `ReplyPen('ask', {text, requestId, key})` (loader `?v=6`; queueable
+  before the loader, every mode) sends `text` at once as the first message of a NEW conversation, e.g.
+  from your own home page's "Why?" button that navigates to your chat page. Mint `requestId` on the
+  click, before navigating (opaque, `[A-Za-z0-9._:-]{1,128}`), and pass the same one on every re-mount,
+  reload or retry: a repeat shows the conversation that id created and never sends twice (a different
+  text or key with a known id is ignored). `key` (optional) names an example in the project's
+  `chat_inspiration` files (`{#key}`); ReplyPen attaches that example's hidden instructions
+  server-side, so your page never carries them. An unknown key still sends the question, without them.
+  An ask wins over resuming the last conversation and leaves the user's unsent text alone; if it cannot
+  be sent, the question waits in the composer. A closed bubble opens. No result callback yet. An older
+  cached loader drops the command: use `?v=6`.
 - The token is readable by your page's JavaScript, here as with `data-rc-token`. The iframe isolates
   CSS/DOM, not the token from host-page XSS; your CSP and the short, single-use, origin-pinned token
   are the controls.
@@ -306,11 +317,14 @@ clients should use the widget rather than inventing that bridge. JSON errors use
 POST /chat/v1/session?project=acme
 ```
 
-No request body. Use a fresh token. Response:
+No request body (the widget's `ask` sends `{"request_id":"<id>"}`). Use a fresh token. Response:
 
 ```json
 {"session_id":"<uuid>","greeting":"<text>"}
 ```
+
+With a `request_id` and a token that carries a principal, a repeat for the same principal answers
+with the session that id opened, `"existing": true`, and does not spend the token.
 
 ### Send a message and read SSE
 
@@ -507,7 +521,7 @@ or `[ReplyPen]` log line and use the same catalogue.
 
 ## Project-specific page context
 
-Use loader revision `?v=5`. Add `getPageContext` to your existing `ReplyPen('boot', ...)` call:
+Use loader revision `?v=5` or later (`?v=6` adds `ask`). Add `getPageContext` to your existing `ReplyPen('boot', ...)` call:
 
 ```js
 ReplyPen('boot', {
