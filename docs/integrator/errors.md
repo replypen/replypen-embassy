@@ -12,7 +12,7 @@ secrets, personal data, private host details, provider names, costs, or stack tr
 bundle.
 
 `rp dev action doctor <action-id> [--params JSON] [--bundle]` ships today. In `rp`, or `rc >= 1.22.0`, use
-`rp project chat doctor [--origin URL] [--principal-kind KIND] [--since 30m|1h|24h] [--bundle]` for chat diagnostics.
+`rp project chat doctor [--origin URL] [--page URL] [--principal-kind KIND] [--since 30m|1h|24h] [--bundle]` for chat diagnostics.
 
 ## ACTION_CLOCK_SKEW_INVALID
 
@@ -566,6 +566,27 @@ bundle.
 - **Who fixes:** you.
 - **Self-fix:** Verify the result handler is registered, loadable, and succeeds for the redacted conformance fixture.
 - **Escalate with:** The error line, Embassy version, hub SHA, and `rp dev action doctor <action-id> --bundle`.
+
+## HOST_PAGE_UNREACHABLE
+
+- **Meaning:** A doctor warning: `rp project chat doctor --page URL` could not fetch that page, so its Permissions-Policy was not checked.
+- **Who fixes:** you.
+- **Self-fix:** Pass a publicly reachable URL of a page that mounts the chat, or check the header in the browser's Network tab.
+- **Escalate with:** The page URL and `rp project chat doctor --bundle`.
+
+## HOST_POLICY_BLOCKS_DISPLAY_CAPTURE
+
+- **Meaning:** A doctor warning: the host page's `Permissions-Policy` denies `display-capture` to the ReplyPen origin, so screen recording and screenshots of other tabs or windows fail in the chat ("Screenshot this page" still works). The iframe cannot widen the host page's policy.
+- **Who fixes:** you.
+- **Self-fix:** Add the ReplyPen origin to the feature, e.g. `display-capture=(self "https://app.replypen.com")`, or drop the directive.
+- **Escalate with:** The page's `Permissions-Policy` header and `rp project chat doctor --page URL --bundle`.
+
+## HOST_POLICY_BLOCKS_MICROPHONE
+
+- **Meaning:** A doctor warning: the host page's `Permissions-Policy` denies `microphone` to the ReplyPen origin (e.g. `microphone=()`), so the chat hides its dictation button and meeting recording. Visitors cannot fix this in their browser. Fine on a text-only public site; fix it where dictation should work.
+- **Who fixes:** you.
+- **Self-fix:** Add the ReplyPen origin to the feature, e.g. `microphone=(self "https://app.replypen.com")`.
+- **Escalate with:** The page's `Permissions-Policy` header and `rp project chat doctor --page URL --bundle`.
 
 ## HOST_REFUSED
 

@@ -191,6 +191,19 @@ connect-src https://app.replypen.com
 Merge these sources into the app's existing directives. `script-src` loads the widget loader,
 `frame-src` loads the launcher and panel, and `connect-src` permits chat fetch/SSE traffic.
 
+## Host-page Permissions-Policy
+
+Dictation, meeting and screen recording, and screenshots of other tabs run inside the ReplyPen iframe. The loader
+delegates `microphone` and `display-capture` to it, but your page's own `Permissions-Policy` header is
+the ceiling: `microphone=()` or `microphone=(self)` blocks it for our iframe, and the chat then hides
+the mic. If your page sends these features, include the ReplyPen origin:
+
+```text
+Permissions-Policy: microphone=(self "https://app.replypen.com"), display-capture=(self "https://app.replypen.com")
+```
+
+Check a page with `rp project chat doctor --page https://your.app/page-with-chat`.
+
 ## Widget tag
 
 ```html
